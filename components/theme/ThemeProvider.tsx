@@ -8,7 +8,7 @@ const systemTheme = (): Theme => window.matchMedia('(prefers-color-scheme: dark)
 const resolveTheme = (preference: ThemePreference): Theme => preference === 'system' ? systemTheme() : preference;
 const isPreference = (value: unknown): value is ThemePreference => value === 'system' || value === 'dark' || value === 'light';
 const readPreference = (): ThemePreference => {
-  try { const value = window.localStorage.getItem(STORAGE_KEY); return isPreference(value) ? value : 'system'; } catch { return 'system'; }
+  try { const value = window.localStorage.getItem(STORAGE_KEY); return isPreference(value) ? value : 'light'; } catch { return 'light'; }
 };
 const applyTheme = (theme: Theme, preference: ThemePreference) => {
   const root = document.documentElement;

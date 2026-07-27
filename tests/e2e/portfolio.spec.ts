@@ -45,13 +45,13 @@ for (const viewport of VIEWPORTS) {
   });
 }
 
-test('theme defaults to system, supports explicit choices, and persists', async ({ page }) => {
-  await page.emulateMedia({ colorScheme: 'light' });
+test('theme defaults to light, supports explicit choices, and persists', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'dark' });
   await page.goto('/');
   await page.evaluate(() => localStorage.removeItem('dione-theme'));
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-  await expect(page.locator('html')).toHaveAttribute('data-theme-preference', 'system');
+  await expect(page.locator('html')).toHaveAttribute('data-theme-preference', 'light');
   await page.getByRole('group', { name: 'Theme' }).first().getByRole('button', { name: 'dark', exact: true }).click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await expect(page.locator('html')).toHaveAttribute('data-theme-preference', 'dark');
