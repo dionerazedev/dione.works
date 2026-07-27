@@ -1,0 +1,1 @@
+export const SectionHeading = ({ number, label, title, comment, id }: { number: string; label: string; title: string; comment?: string; id: string }) => <header className="section-heading"><p className="section-index">{number} — {label}</p><h2 id={id}>{title}</h2>{comment && <p className="section-comment">{comment}</p>}</header>;

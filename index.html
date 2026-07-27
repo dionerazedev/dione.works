@@ -1,27 +1,85 @@
 
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" data-theme="light" data-theme-preference="system">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dione Raze Oro - AI Automation & Full-Stack Developer</title>
-    <meta name="description" content="AI automation and full-stack developer building intelligent workflows, scalable web applications, Migo, and Laag Bukidnon.">
-    <meta name="theme-color" content="#0a0a0a">
-    <link rel="canonical" href="https://dione-works.vercel.app/">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dione Raze Oro | AI Automation & Full-Stack Developer</title>
+    <meta name="description" content="Full-stack developer from the Philippines building web applications, AI-powered tools, automation systems, and digital products.">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="theme-color" content="#ffffff">
+    <script>
+      (function () {
+        var preference = 'system';
+        try {
+          var savedTheme = window.localStorage.getItem('dione-theme');
+          if (savedTheme === 'light' || savedTheme === 'dark' || savedTheme === 'system') preference = savedTheme;
+        } catch (_) {}
+        var systemTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        var theme = preference === 'system' ? systemTheme : preference;
+        var root = document.documentElement;
+        root.dataset.theme = theme;
+        root.dataset.themePreference = preference;
+        root.classList.toggle('dark', theme === 'dark');
+        root.style.colorScheme = theme;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', theme === 'dark' ? '#0c0c0f' : '#ffffff');
+      })();
+    </script>
+    <link rel="canonical" href="https://dioneraze.com/">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Dione Raze Oro - AI Automation & Full-Stack Developer">
-    <meta property="og:description" content="AI-powered automations, intelligent workflows, and full-stack products built around real business and travel problems.">
-    <meta property="og:url" content="https://dione-works.vercel.app/">
-    <meta property="og:image" content="https://dione-works.vercel.app/images/portfolio-og.png">
+    <meta property="og:site_name" content="Dione Raze Oro Portfolio">
+    <meta property="og:locale" content="en_PH">
+    <meta property="og:title" content="Dione Raze Oro | AI Automation & Full-Stack Developer">
+    <meta property="og:description" content="Full-stack developer from the Philippines building web applications, AI-powered tools, automation systems, and digital products.">
+    <meta property="og:url" content="https://dioneraze.com/">
+    <meta property="og:image" content="https://dioneraze.com/images/portfolio-og.png">
+    <meta property="og:image:alt" content="Dione Raze Oro, Full-Stack & AI Automation Engineer portfolio">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Dione Raze Oro - AI Automation & Full-Stack Developer">
-    <meta name="twitter:description" content="AI-powered automations, intelligent workflows, and full-stack products built around real problems.">
-    <meta name="twitter:image" content="https://dione-works.vercel.app/images/portfolio-og.png">
-    <link rel="icon" href="/images/dione-profile.jpg" type="image/jpeg">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/index.css">
+    <meta name="twitter:title" content="Dione Raze Oro | AI Automation & Full-Stack Developer">
+    <meta name="twitter:description" content="Full-stack developer from the Philippines building web applications, AI-powered tools, automation systems, and digital products.">
+    <meta name="twitter:image" content="https://dioneraze.com/images/portfolio-og.png">
+    <meta name="twitter:image:alt" content="Dione Raze Oro, Full-Stack & AI Automation Engineer portfolio">
+    <link rel="icon" href="/images/dione-profile.webp" type="image/webp">
+    <link rel="preload" href="/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/GeistMono-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Dione Raze Oro",
+        "url": "https://dioneraze.com/",
+        "image": "https://dioneraze.com/images/dione-profile.webp",
+        "jobTitle": "AI Automation & Full-Stack Developer",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Davao City",
+          "addressCountry": "PH"
+        },
+        "sameAs": [
+          "https://github.com/dionerazedev",
+          "https://www.linkedin.com/in/dione-raze-oro-b274a8243/"
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Dione Raze Oro Portfolio",
+        "url": "https://dioneraze.com/",
+        "description": "Full-stack developer from the Philippines building web applications, AI-powered tools, automation systems, and digital products.",
+        "inLanguage": "en",
+        "publisher": {
+          "@type": "Person",
+          "name": "Dione Raze Oro",
+          "url": "https://dioneraze.com/"
+        }
+      }
+    </script>
 </head>
 <body>
     <div id="root"></div>

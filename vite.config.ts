@@ -12,10 +12,9 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('node_modules/gsap') || id.includes('node_modules/@gsap')) return 'gsap';
           if (id.includes('node_modules/framer-motion') || id.includes('node_modules/motion-dom') || id.includes('node_modules/motion-utils')) return 'motion';
           if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) return 'react';
-          if (id.includes('node_modules/lucide-react')) return 'icons';
+          if (id.includes('node_modules/@phosphor-icons/react')) return 'icons';
         },
       },
     },

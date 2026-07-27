@@ -1,6 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Send, X, MessageCircle, Minimize2, Maximize2 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  ArrowsInSimple,
+  ArrowsOutSimple,
+  ChatCircleDots,
+  PaperPlaneTilt,
+  X,
+} from '@phosphor-icons/react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { createPortal } from 'react-dom';
+import { useDialogAccessibility } from './ui/useDialogAccessibility';
 
 interface Message {
   id: string;
@@ -9,274 +17,365 @@ interface Message {
 }
 
 const BOT_RESPONSES = {
-  greeting: [
-    "Hi, I'm Dione's portfolio assistant. Ask me about automation, full-stack applications, Migo, or Laag Bukidnon.",
-    "Welcome. I can walk you through Dione's automation systems, full-stack products, featured projects, and development approach.",
-  ],
-  about: "Dione Raze Oro is an AI automation and full-stack developer based in the Philippines. He builds intelligent workflows, connected web applications, conversational assistants, and scalable digital products.",
-  automation: "I design and build automation systems using n8n, Make, Zapier, and GoHighLevel. I can automate lead qualification, CRM workflows, data processing, document handling, and more. Most systems respond in real-time (under 10 seconds). What process are you looking to automate?",
-  ai: "I build AI systems like chatbots, WhatsApp AI concierges, lead capture pipelines, document processors, and AI-powered research systems using Claude, ChatGPT, and other AI models. I've built a WhatsApp AI that handles bookings and inquiries automatically with zero human touch. What's your AI need?",
-  crm: "I specialize in CRM automation with GoHighLevel and HubSpot, including lead qualification, scoring pipelines, and intake automation. I can design workflows that enrich, qualify, and prioritize leads.",
-  tools: "I work with: n8n, Make, Zapier, GoHighLevel, Supabase, Airtable, Google Sheets, Claude, ChatGPT, Base44, and API integrations. Basically, I connect any tool you need.",
-  dashboard: "I build internal dashboards and tools with modern frameworks. Think analytics, booking systems, KPI tracking, and operational dashboards that give you real-time visibility into your business.",
-  projects: "The featured products are Migo and Laag Bukidnon. Migo is an AI-assisted travel app for planning, expenses, passport progress, community, and memories. Laag Bukidnon is a local tourism platform for destinations, stays, guides, and trip planning.",
-  whatsapp: "I've built WhatsApp AI concierge systems that handle customer inquiries, bookings, and logging using n8n, AI, and Google Sheets. Routine conversations can run automatically.",
-  services: "Dione builds AI automation systems, full-stack web applications, conversational assistants, responsive product interfaces, API integrations, and connected data workflows.",
-  contact: "Dione is open to freelance, project-based, and long-term roles. Share the product idea or workflow problem, then schedule a call or connect on LinkedIn.",
-  hiring: "Yes, I'm available for work! I work with startups, agencies, and service-based businesses that want to automate operations and scale without adding headcount.",
-  pricing: "I work project-by-project based on complexity and scope. Every automation is custom-built for your specific workflow. Let's discuss your needs and I'll design the right solution.",
-  experience: "Dione builds working products and automation systems through personal projects and client work. The approach prioritizes useful outcomes, responsive interfaces, and steady iteration.",
-  approach: "Dione combines product design, AI, APIs, and automation around a clear user problem. Each feature should make planning, discovery, or operations easier.",
-  travel: "Travel is central to Dione's product niche. Migo addresses planning and trip management, while Laag Bukidnon focuses on useful local discovery and tourism information.",
-  default: "Tell me what you would like to explore: AI automation, full-stack development, Migo, Laag Bukidnon, or connected workflows.",
-};
+  greeting:
+    "Hi, I'm Dione's portfolio assistant. Ask me about his featured products, automation work, services, or technical approach.",
+  about:
+    'Dione Raze Oro is a Full-Stack & AI Automation Engineer based in Davao City, Philippines. He builds web applications, API integrations, and workflow automation systems.',
+  automation:
+    'Dione builds workflow automations with n8n, Make, Zapier, AI models, webhooks, spreadsheets, and third-party APIs. The portfolio shows how these systems route requests, structure data, and reduce repetitive processing.',
+  ai:
+    'The portfolio includes AI-assisted product features and automation prototypes for inquiry routing, booking requests, document processing, and customer intake. Each project is labeled by its actual status and documented capabilities.',
+  crm:
+    'Dione has explored lead qualification, intake, routing, and data synchronization workflows. These systems are designed to organize incoming information and make follow-up easier to manage.',
+  tools:
+    'The core toolkit includes React, TypeScript, Supabase, PostgreSQL, n8n, Make, Zapier, Claude, Google Sheets, REST APIs, and webhooks.',
+  dashboard:
+    'Dione builds responsive product interfaces and internal tools for workflows such as booking, intake, reporting, and content operations.',
+  projects:
+    'Selected work includes Migo, Laag Bukidnon, Narra Estates, and Peak Athletics. Current work includes automation prototypes such as the WhatsApp AI Booking & Inquiry Agent and the Voice Appointment Manager.',
+  peak:
+    'Peak Athletics is a live Shopify concept storefront for a fictional performance-apparel brand. It demonstrates Liquid theme sections, product and collection architecture, variants, predictive search, cart behavior, checkout integration, and responsive storefront testing.',
+  whatsapp:
+    'The WhatsApp AI Booking & Inquiry Agent is presented as a technical prototype. Its workflow covers booking requests, general inquiries, cancellations, complaints, escalations, and conversation logging with n8n, WhatsApp, Claude, and Google Sheets.',
+  services:
+    'Dione is available for full-stack development, AI automation, responsive product interfaces, and API integration projects.',
+  contact:
+    'You can schedule a 30-minute call, email dioneraze.dev@gmail.com, open the resume, or connect through GitHub and LinkedIn.',
+  hiring:
+    'Dione is currently available for full-stack development, AI automation, and API integration projects. The contact section includes direct scheduling, email, and resume actions.',
+  pricing:
+    'Project scope and pricing depend on the product, integrations, and workflow complexity. A short call is the best way to define requirements and the right build plan.',
+  experience:
+    'The portfolio demonstrates Dione\'s experience through live products, source code, project visuals, technical prototypes, and documented implementation choices.',
+  approach:
+    'Dione works across product design, frontend development, databases, integrations, and automation, with a focus on practical systems that solve a clear problem.',
+  travel:
+    'Migo combines trip planning, social travel features, and AI assistance. Laag Bukidnon organizes useful local destination and tourism information into a responsive platform.',
+  default:
+    'Tell me what you would like to explore: featured work, AI automation, full-stack development, services, or ways to contact Dione.',
+} as const;
 
 const getResponse = (userInput: string): string => {
   const lower = userInput.toLowerCase().trim();
 
-  // Conversational greetings
-  if (lower === 'hi' || lower === 'hello' || lower === 'hey' || lower === 'hey there' || lower === 'yo') {
-    return "Hi. Are you here to explore Migo, Laag Bukidnon, travel product work, or Dione's broader AI experience?";
+  if (['hi', 'hello', 'hey', 'hey there', 'yo'].includes(lower)) {
+    return "Hi. Would you like to explore Dione's featured products, automation work, services, or technical stack?";
   }
-  if (lower === 'how are you' || lower === 'how are you doing' || lower === 'whats up' || lower === "what's up") {
-    return "Doing great, thanks for asking. What would you like to know about the travel products or AI systems?";
+  if (['how are you', 'how are you doing', 'whats up', "what's up"].includes(lower)) {
+    return 'Ready to help. What would you like to know about the portfolio?';
   }
-  if (lower === 'thanks' || lower === 'thank you' || lower === 'thx') {
-    return "You got it! Happy to help. Anything else you'd like to know?";
+  if (['thanks', 'thank you', 'thx'].includes(lower)) {
+    return 'You are welcome. I can also point you to a project, the resume, or the contact section.';
   }
-  if (lower === 'cool' || lower === 'nice' || lower === 'awesome' || lower === 'amazing') {
-    return "Glad you think so. Feel free to ask about the projects, product approach, or how to work with Dione.";
-  }
-  if (lower === 'ok' || lower === 'okay' || lower === 'got it' || lower === 'understood') {
-    return "Perfect! What else would you like to know?";
-  }
-  if (lower === 'haha' || lower === 'lol' || lower === 'hehe') {
-    return "Glad that resonated. What else would you like to know?";
+  if (['cool', 'nice', 'awesome', 'amazing', 'ok', 'okay', 'got it', 'understood'].includes(lower)) {
+    return 'Glad that helped. What else would you like to explore?';
   }
 
-  // Check for specific keywords
   if (lower.includes('who are you') || lower.includes('dione') || lower.includes('about you')) {
     return BOT_RESPONSES.about;
   }
   if (lower.includes('whatsapp') || lower.includes('concierge')) {
     return BOT_RESPONSES.whatsapp;
   }
-  if (lower.includes('dashboard') || lower.includes('analytics') || lower.includes('tool')) {
+  if (lower.includes('peak') || lower.includes('shopify') || lower.includes('ecommerce') || lower.includes('e-commerce')) {
+    return BOT_RESPONSES.peak;
+  }
+  if (lower.includes('dashboard') || lower.includes('analytics')) {
     return BOT_RESPONSES.dashboard;
   }
-  if (lower.includes('travel') || lower.includes('migo') || lower.includes('laag') || lower.includes('bukidnon') || lower.includes('backpack')) {
+  if (lower.includes('travel') || lower.includes('migo') || lower.includes('laag') || lower.includes('bukidnon')) {
     return BOT_RESPONSES.travel;
   }
-  if (lower.includes('experience') || lower.includes('how long') || lower.includes('background')) {
+  if (lower.includes('experience') || lower.includes('background')) {
     return BOT_RESPONSES.experience;
   }
-  if (lower.includes('approach') || lower.includes('different') || lower.includes('style')) {
+  if (lower.includes('approach') || lower.includes('process') || lower.includes('style')) {
     return BOT_RESPONSES.approach;
   }
   if (lower.includes('tool') || lower.includes('tech') || lower.includes('framework') || lower.includes('n8n') || lower.includes('make') || lower.includes('zapier')) {
     return BOT_RESPONSES.tools;
   }
-  if (lower.includes('project') || lower.includes('example') || lower.includes('webhook') || lower.includes('booking')) {
+  if (lower.includes('project') || lower.includes('example') || lower.includes('booking')) {
     return BOT_RESPONSES.projects;
   }
-  if (lower.includes('automate') || lower.includes('automation') || lower.includes('workflow') || lower.includes('process')) {
+  if (lower.includes('automate') || lower.includes('automation') || lower.includes('workflow')) {
     return BOT_RESPONSES.automation;
   }
   if (lower.includes('ai') || lower.includes('artificial intelligence') || lower.includes('chatbot') || lower.includes('agent')) {
     return BOT_RESPONSES.ai;
   }
-  if (lower.includes('crm') || lower.includes('lead') || lower.includes('sales') || lower.includes('customer') || lower.includes('pipeline') || lower.includes('qualification')) {
+  if (lower.includes('crm') || lower.includes('lead') || lower.includes('sales') || lower.includes('customer') || lower.includes('pipeline')) {
     return BOT_RESPONSES.crm;
   }
-  if (lower.includes('service') || lower.includes('offer') || lower.includes('do you') || lower.includes('expertise') || lower.includes('capability')) {
+  if (lower.includes('service') || lower.includes('offer') || lower.includes('expertise') || lower.includes('capability')) {
     return BOT_RESPONSES.services;
   }
-  if (lower.includes('contact') || lower.includes('reach') || lower.includes('get in touch') || lower.includes('schedule') || lower.includes('call') || lower.includes('work with')) {
+  if (lower.includes('contact') || lower.includes('email') || lower.includes('schedule') || lower.includes('call') || lower.includes('resume')) {
     return BOT_RESPONSES.contact;
   }
-  if (lower.includes('available') || lower.includes('hire') || lower.includes('freelance') || lower.includes('client')) {
+  if (lower.includes('available') || lower.includes('hire') || lower.includes('freelance')) {
     return BOT_RESPONSES.hiring;
   }
-  if (lower.includes('price') || lower.includes('cost') || lower.includes('rate') || lower.includes('charge') || lower.includes('budget')) {
+  if (lower.includes('price') || lower.includes('cost') || lower.includes('rate') || lower.includes('budget')) {
     return BOT_RESPONSES.pricing;
   }
 
   return BOT_RESPONSES.default;
 };
 
-export const ChatAssistant: React.FC = () => {
+export const ChatAssistant = ({ isOverlayOpen = false }: { isOverlayOpen?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      type: 'bot',
-      text: BOT_RESPONSES.greeting[0],
-    },
+    { id: 'welcome', type: 'bot', text: BOT_RESPONSES.greeting },
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const [assistantError, setAssistantError] = useState('');
+  const [isOnline, setIsOnline] = useState(() => navigator.onLine);
+  const launcherRef = useRef<HTMLButtonElement | null>(null);
+  const panelRef = useRef<HTMLElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const pendingResponseRef = useRef<number | null>(null);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const handleSendMessage = async (text: string) => {
-    if (!text.trim()) return;
-
-    // Add user message
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      type: 'user',
-      text: text.trim(),
+    const handleExternalClose = () => {
+      setIsOpen(false);
+      setIsMinimized(false);
     };
-    setMessages(prev => [...prev, userMessage]);
+    const handleExternalOpen = () => {
+      setIsOpen(true);
+      setIsMinimized(false);
+    };
+    window.addEventListener('portfolio:close-assistant', handleExternalClose);
+    window.addEventListener('portfolio:open-assistant', handleExternalOpen);
+    return () => {
+      window.removeEventListener('portfolio:close-assistant', handleExternalClose);
+      window.removeEventListener('portfolio:open-assistant', handleExternalOpen);
+    };
+  }, []);
+
+  useEffect(() => {
+    const online = () => setIsOnline(true);
+    const offline = () => setIsOnline(false);
+    window.addEventListener('online', online);
+    window.addEventListener('offline', offline);
+    return () => { window.removeEventListener('online', online); window.removeEventListener('offline', offline); };
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen || isMinimized) return;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    messagesEndRef.current?.scrollIntoView({
+      behavior: reduceMotion ? 'auto' : 'smooth',
+      block: 'nearest',
+    });
+  }, [isOpen, isMinimized, messages, isLoading]);
+
+  useEffect(() => {
+    if (!isOpen || isMinimized) return;
+    const focusFrame = window.requestAnimationFrame(() => inputRef.current?.focus());
+    return () => window.cancelAnimationFrame(focusFrame);
+  }, [isOpen, isMinimized]);
+
+  useEffect(
+    () => () => {
+      if (pendingResponseRef.current !== null) {
+        window.clearTimeout(pendingResponseRef.current);
+      }
+    },
+    [],
+  );
+
+  const closeChat = useCallback(() => {
+    setIsOpen(false);
+    setIsMinimized(false);
+    launcherRef.current?.focus();
+  }, []);
+  useDialogAccessibility({ isOpen: isOpen && !isOverlayOpen, onClose: closeChat, containerRef: panelRef, initialFocusRef: inputRef });
+
+  const handleSendMessage = (text: string) => {
+    const trimmedText = text.trim();
+    if (!trimmedText || isLoading) return;
+
+    const userMessage: Message = {
+      id: `user-${crypto.randomUUID()}`,
+      type: 'user',
+      text: trimmedText,
+    };
+
+    setMessages((current) => [...current, userMessage]);
     setInput('');
     setIsLoading(true);
+    setAssistantError('');
 
-    // Simulate thinking delay
-    await new Promise(resolve => setTimeout(resolve, 600));
-
-    // Get response
-    const botText = getResponse(text);
-    const botMessage: Message = {
-      id: (Date.now() + 1).toString(),
-      type: 'bot',
-      text: botText,
-    };
-
-    setMessages(prev => [...prev, botMessage]);
-    setIsLoading(false);
+    pendingResponseRef.current = window.setTimeout(() => {
+      try {
+        setMessages((current) => [...current, { id: `assistant-${crypto.randomUUID()}`, type: 'bot', text: getResponse(trimmedText) }]);
+      } catch {
+        setAssistantError('The local portfolio index could not prepare an answer. Try another question.');
+      }
+      setIsLoading(false);
+      pendingResponseRef.current = null;
+    }, 450);
   };
 
-  return (
+  return createPortal(
     <>
-      {/* Chat Widget Button */}
       <motion.button
+        ref={launcherRef}
+        type="button"
+        disabled={isOverlayOpen}
         onClick={() => {
-          setIsOpen(!isOpen);
-          if (isMinimized) setIsMinimized(false);
+          if (isOpen) closeChat();
+          else setIsOpen(true);
         }}
-        className="fixed bottom-0 right-2 sm:bottom-16 sm:right-6 z-50 w-11 h-11 sm:w-14 sm:h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center min-h-[44px] min-w-[44px] bg-yellow-400 text-black hover:bg-yellow-300"
-        aria-label={isOpen ? 'Close chat' : 'Open chat assistant'}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
+        className={`chat-launcher ${isOverlayOpen ? 'is-hidden' : ''}`}
+        aria-label={isOpen ? 'Close portfolio assistant' : 'Open portfolio assistant'}
+        aria-controls="portfolio-assistant"
+        aria-haspopup="dialog"
+        aria-expanded={isOpen}
+        aria-hidden={isOverlayOpen}
+        whileHover={{ scale: 1.06 }}
+        whileTap={{ scale: 0.96 }}
       >
-        {isOpen ? <X size={24} /> : <MessageCircle size={24} />}
+        {isOpen ? (
+          <X size={24} weight="regular" aria-hidden="true" />
+        ) : (
+          <ChatCircleDots size={25} weight="regular" aria-hidden="true" />
+        )}
       </motion.button>
 
-      {/* Chat Window */}
       <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        {isOpen && !isOverlayOpen && (
+          <motion.section
+            ref={panelRef}
+            id="portfolio-assistant"
+            initial={{ opacity: 0, y: 16, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="fixed bottom-14 sm:bottom-32 right-4 sm:right-6 z-50 w-96 max-w-[calc(100vw-2rem)] bg-[#0c0c0c] border border-[#1e1e1e] shadow-2xl rounded-lg overflow-hidden flex flex-col h-[600px] max-h-[calc(100dvh-5rem)] sm:max-h-[70vh]"
+            exit={{ opacity: 0, y: 12, scale: 0.98 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className={`chat-panel ${isMinimized ? 'is-minimized' : ''}`}
             role="dialog"
             aria-modal="true"
             aria-labelledby="chat-title"
+            aria-describedby="chat-description"
           >
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-[#1e1e1e] bg-[#0f0f0f]">
-              <div className="flex-1">
-                <h2 id="chat-title" className="mono-font text-[12px] font-bold text-white uppercase tracking-widest">
-                  Dione's Portfolio Assistant
+            <header className="chat-header">
+              <div>
+                <h2 id="chat-title">
+                  Portfolio Assistant
                 </h2>
-                <p className="mono-font text-[10px] text-neutral-500 mt-1">Always online</p>
+                <p id="chat-description">
+                  Project and hiring guide
+                </p>
               </div>
               <button
-                onClick={() => setIsMinimized(!isMinimized)}
-                className="p-1.5 hover:bg-[#1a1a1a] rounded transition-colors"
-                aria-label={isMinimized ? 'Expand chat' : 'Minimize chat'}
+                type="button"
+                onClick={() => {
+                  setIsMinimized((current) => !current);
+                  if (isMinimized) window.requestAnimationFrame(() => inputRef.current?.focus());
+                }}
+                className="icon-button"
+                aria-label={isMinimized ? 'Expand portfolio assistant' : 'Minimize portfolio assistant'}
+                aria-expanded={!isMinimized}
               >
                 {isMinimized ? (
-                  <Maximize2 size={18} className="text-neutral-400" />
+                  <ArrowsOutSimple size={18} weight="regular" aria-hidden="true" />
                 ) : (
-                  <Minimize2 size={18} className="text-neutral-400" />
+                  <ArrowsInSimple size={18} weight="regular" aria-hidden="true" />
                 )}
               </button>
-            </div>
+              <button type="button" onClick={closeChat} className="icon-button" aria-label="Close portfolio assistant"><X size={17} aria-hidden="true" /></button>
+            </header>
 
-            {/* Messages */}
             {!isMinimized && (
               <>
-                <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#0a0a0a]">
-                  {messages.map((msg) => (
+                <div
+                  className="chat-log"
+                  role="log"
+                  aria-live="polite"
+                  aria-relevant="additions text"
+                  aria-busy={isLoading}
+                >
+                  {messages.length === 1 && (
+                    <div className="chat-suggestions" aria-label="Suggested questions">
+                      {['Which projects are live?', 'What can Dione automate?', 'How can I contact Dione?'].map((question) => <button key={question} type="button" onClick={() => handleSendMessage(question)}>{question}</button>)}
+                    </div>
+                  )}
+                  {messages.map((message) => (
                     <motion.div
-                      key={msg.id}
+                      key={message.id}
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                      className={`chat-message-row ${message.type === 'user' ? 'is-user' : ''}`}
                     >
                       <div
-                        className={`max-w-[80%] px-4 py-3 rounded-lg ${
-                          msg.type === 'user'
-                            ? 'bg-yellow-400 text-black mono-font text-[13px]'
-                            : 'bg-[#1a1a1a] text-neutral-300 mono-font text-[13px] border border-[#2a2a2a]'
-                        }`}
+                        className={`chat-message ${message.type === 'user' ? 'is-user' : ''}`}
                       >
-                        <p className="leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                        <p className="whitespace-pre-wrap">{message.text}</p>
                       </div>
                     </motion.div>
                   ))}
 
                   {isLoading && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="flex gap-2 justify-start"
-                    >
-                      <div className="bg-[#1a1a1a] p-3 rounded-lg flex gap-1 border border-[#2a2a2a]">
-                        <div className="w-2 h-2 bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <div className="w-2 h-2 bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <div className="w-2 h-2 bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <div className="chat-loading" role="status">
+                      <span className="sr-only">Preparing a response</span>
+                      <div aria-hidden="true">
+                        {[0, 150, 300].map((delay) => (
+                          <span
+                            key={delay}
+                            className="loading-dot"
+                            style={{ animationDelay: `${delay}ms` }}
+                          />
+                        ))}
                       </div>
-                    </motion.div>
+                    </div>
                   )}
+                  {assistantError && <p className="chat-error" role="alert">{assistantError}</p>}
 
                   <div ref={messagesEndRef} />
                 </div>
 
-                {/* Input */}
-                <div className="p-3 border-t border-[#1e1e1e] bg-[#0f0f0f]">
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      handleSendMessage(input);
-                    }}
-                    className="flex gap-2"
-                  >
+                <form
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    handleSendMessage(input);
+                  }}
+                  className="chat-form"
+                >
+                  {!isOnline && <p className="chat-offline">Offline · local portfolio answers remain available.</p>}
+                  <label htmlFor="portfolio-chat-input">
+                    Ask about Dione's work
+                  </label>
+                  <div className="chat-input-row">
                     <input
+                      ref={inputRef}
+                      id="portfolio-chat-input"
                       type="text"
                       value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      placeholder="Ask me anything..."
-                      className="flex-1 px-3 py-2 bg-[#1a1a1a] border border-[#2a2a2a] rounded text-white mono-font text-[12px] placeholder-neutral-600 focus:outline-none focus:border-yellow-400/50 transition-colors disabled:opacity-50"
+                      onChange={(event) => setInput(event.target.value)}
+                      placeholder="Projects, services, or contact"
+                      className="chat-input"
                       disabled={isLoading}
-                      aria-label="Chat message input"
                     />
                     <button
                       type="submit"
                       disabled={isLoading || !input.trim()}
-                      className="p-2 bg-yellow-400 hover:bg-yellow-300 disabled:bg-neutral-700 text-black disabled:text-neutral-500 rounded transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                      className="chat-send"
                       aria-label="Send message"
                     >
-                      <Send size={16} />
+                      <PaperPlaneTilt size={17} weight="regular" aria-hidden="true" />
                     </button>
-                  </form>
-                </div>
+                  </div>
+                </form>
               </>
             )}
-          </motion.div>
+          </motion.section>
         )}
       </AnimatePresence>
-    </>
+    </>,
+    document.body,
   );
 };

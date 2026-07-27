@@ -1,47 +1,5 @@
-import React from 'react';
-import { Download, Github, Linkedin, Mail } from 'lucide-react';
+import { ArrowUp } from '@phosphor-icons/react';
+import { Link } from 'react-router-dom';
+import { PROFILE_LINKS } from '../data/navigation';
 
-export const Footer: React.FC = () => {
-  const year = new Date().getFullYear();
-
-  return (
-    <footer className="h-11 border-t border-[#1a1a1a] bg-[#0e0e0e] flex items-center justify-center sm:justify-between px-4 sm:px-6 mono-font text-[9px] sm:text-[10px] tracking-widest text-neutral-700 uppercase flex-shrink-0">
-      <span className="hidden sm:inline">© Dione Raze Oro {year}</span>
-      <nav className="flex items-center gap-3 sm:gap-5" aria-label="Social links">
-        <a
-          href="/dione-raze-oro-resume.pdf"
-          download
-          className="hover:text-white transition-colors p-1.5 min-w-[44px] min-h-[44px] flex items-center justify-center"
-          aria-label="Download resume"
-        >
-          <Download size={15} aria-hidden="true" />
-        </a>
-        <a
-          href="https://github.com/dionerazedev-commits"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-white transition-colors p-1.5 min-w-[44px] min-h-[44px] flex items-center justify-center"
-          aria-label="GitHub profile"
-        >
-          <Github size={15} aria-hidden="true" />
-        </a>
-        <a
-          href="https://www.linkedin.com/in/dione-raze-oro-b274a8243/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-white transition-colors p-1.5 min-w-[44px] min-h-[44px] flex items-center justify-center"
-          aria-label="LinkedIn profile"
-        >
-          <Linkedin size={15} aria-hidden="true" />
-        </a>
-        <a
-          href="mailto:dioneraze.dev@gmail.com"
-          className="hover:text-white transition-colors p-1.5 min-w-[44px] min-h-[44px] flex items-center justify-center"
-          aria-label="Send email to Dione"
-        >
-          <Mail size={15} aria-hidden="true" />
-        </a>
-      </nav>
-    </footer>
-  );
-};
+export const Footer = () => <footer className="site-footer"><div><strong>Dione Raze</strong><span>© {new Date().getFullYear()} · Davao City, Philippines</span></div><nav aria-label="Footer links"><Link to="/blog">Blog</Link><Link to="/gear">Gear</Link><Link to="/community">Community</Link><a href={PROFILE_LINKS.github} target="_blank" rel="noreferrer">GitHub ↗</a><a href={PROFILE_LINKS.email}>Email</a><a href="#top" onClick={(event) => { event.preventDefault(); scrollTo({ top: 0, behavior: 'smooth' }); }}>Top <ArrowUp size={11} /></a></nav></footer>;

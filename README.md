@@ -1,16 +1,16 @@
-# Dione Raze Oro — Developer Portfolio
+# Dione Raze — AI Automation + Full-Stack Portfolio
 
-A responsive developer portfolio showcasing AI automation systems, full-stack products, API integrations, and practical software built for real business and travel problems.
+A responsive, monochrome editorial portfolio showcasing Dione Raze Oro's verified full-stack products, AI automation systems, writing drafts, tools, and project case studies.
 
-![Dione Raze Oro developer portfolio](public/images/portfolio-og.png)
+![Dione Raze Oro Full-Stack and AI Automation Engineer portfolio](public/images/portfolio-og.png)
 
 ## Live Demo
 
-[View the portfolio](https://dione-works.vercel.app/)
+[View the portfolio](https://dioneraze.com/)
 
 ## Overview
 
-This portfolio presents selected work across AI automation, full-stack development, conversational systems, and connected business workflows. It includes detailed case studies, live product links, technology summaries, and ways to contact or schedule a call with Dione.
+The site uses a fixed personal sidebar on desktop and a full-screen navigation overlay on mobile. It preserves direct project routes, the portfolio assistant, command palette, theme controls, contact destinations, résumé download, and truthful project disclosures.
 
 ## Problem It Solves
 
@@ -18,14 +18,15 @@ A conventional résumé cannot clearly demonstrate how a developer approaches pr
 
 ## Main Features
 
-- Featured full-stack products with live demos
-- AI automation and workflow case studies
-- Project problem, solution, and impact breakdowns
-- Responsive desktop and mobile interface
-- Searchable portfolio assistant
-- Technology and service overview
+- Fixed minimal sidebar and responsive mobile navigation
+- System, light, and dark themes with persisted explicit choices
+- Featured full-stack products and AI automation case studies
+- Blog architecture with published articles and clearly labeled draft records
+- Verified gear, technology, capability, experience, and certification content
+- Searchable command palette and accessible portfolio assistant
+- Optional Supabase-backed presence and community chat
 - Contact links, résumé download, and Calendly integration
-- Motion and reduced-motion accessibility support
+- Reduced-motion, keyboard, focus-management, and responsive accessibility support
 
 ## Featured Products
 
@@ -48,7 +49,9 @@ A responsive tourism platform that helps travelers discover destinations, find s
 - Vite
 - Tailwind CSS
 - Framer Motion
+- Phosphor Icons
 - Lucide React
+- Supabase JS (optional community feature)
 - Vercel
 
 The portfolio also documents work involving n8n, Make, Zapier, Supabase, PostgreSQL, OpenAI, Claude, APIs, and related development tools.
@@ -58,12 +61,6 @@ The portfolio also documents work involving n8n, Make, Zapier, Supabase, Postgre
 ### Portfolio preview
 
 ![Portfolio social preview](public/images/portfolio-og.png)
-
-### Migo product screens
-
-| AI travel buddy | Trips and passport | Leaderboards | Profile and memories |
-| --- | --- | --- | --- |
-| ![Migo AI travel buddy](public/images/migo-ai-buddy.jpg) | ![Migo trips](public/images/migo-trips.jpg) | ![Migo leaderboards](public/images/migo-leaderboards.jpg) | ![Migo profile](public/images/migo-profile.jpg) |
 
 ## Installation and Setup
 
@@ -75,7 +72,7 @@ The portfolio also documents work involving n8n, Make, Zapier, Supabase, Postgre
 ### Run locally
 
 ```bash
-git clone https://github.com/dionerazedev-commits/dione.works.git
+git clone https://github.com/dionerazedev/dione.works.git
 cd dione.works
 npm ci
 npm run dev
@@ -83,7 +80,20 @@ npm run dev
 
 Open `http://localhost:3000` in your browser.
 
-This project does not require API keys for local development.
+The core portfolio does not require API keys. Without Supabase variables, `/community` and the sidebar presence indicator show an honest unavailable state and never fabricate viewers or messages.
+
+### Optional community setup
+
+1. Create a Supabase project.
+2. Run [the community migration](supabase/migrations/20260727000000_community.sql) in the Supabase SQL editor or migration workflow.
+3. Add these values to `.env.local`:
+
+```bash
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
+```
+
+The migration creates persistent messages, reports, realtime publication, Row Level Security policies, and server-side cooldown/duplicate protection. Presence uses anonymous session IDs stored locally and exposes no IP address or precise location.
 
 ## Available Scripts
 
@@ -91,6 +101,7 @@ This project does not require API keys for local development.
 npm run dev        # Start the local development server
 npm run lint       # Run ESLint
 npm run typecheck  # Check TypeScript types
+npm run test:e2e   # Run Playwright and axe browser tests
 npm run build      # Create a production build
 npm run preview    # Preview the production build
 ```
@@ -99,8 +110,13 @@ npm run preview    # Preview the production build
 
 ```text
 .
-├── components/       # Navigation, portfolio sections, and assistant UI
-├── public/           # Images, technology icons, and résumé
+├── components/       # Shell, sections, community, projects, themes, and dialogs
+├── data/             # Typed projects, blog posts, gear, navigation, and technology content
+├── pages/            # Blog, gear, community, project, and not-found routes
+├── supabase/          # Optional community database migration
+├── tests/e2e/         # Responsive, interaction, route, and axe coverage
+├── types/             # Shared project, command, and community models
+├── public/           # Local images, SEO files, technology icons, and résumé
 ├── App.tsx           # Application shell
 ├── index.tsx         # React entry point
 ├── index.css         # Global styles
@@ -110,25 +126,23 @@ npm run preview    # Preview the production build
 
 ## Quality and Security
 
-- API keys and credentials are not required or committed.
+- API keys and credentials are not committed; community variables are optional.
 - Environment files are excluded from version control.
 - Type checking, linting, and production builds run in continuous integration.
-- Reduced-motion preferences are respected through Framer Motion.
+- Reduced-motion preferences are respected across Framer Motion and CSS transitions.
+- Viewer presence and community messages come only from Supabase Realtime when configured.
 
 ## Future Improvements
 
-- Split large portfolio sections into smaller feature modules
-- Add component and accessibility tests
-- Move externally hosted project images into controlled storage
-- Add dedicated public repositories for selected automation systems
-- Expand case studies with architecture diagrams and measurable outcomes
+- Publish remaining blog drafts only after editorial review and adding real publication dates.
+- Expand case studies only when additional architecture or outcome evidence is available.
 
 ## Contact
 
-- Portfolio: [dione-works.vercel.app](https://dione-works.vercel.app/)
+- Portfolio: [dioneraze.com](https://dioneraze.com/)
 - Email: [dioneraze.dev@gmail.com](mailto:dioneraze.dev@gmail.com)
 - LinkedIn: [Dione Raze Oro](https://www.linkedin.com/in/dione-raze-oro-b274a8243/)
-- GitHub: [dionerazedev-commits](https://github.com/dionerazedev-commits)
+- GitHub: [dionerazedev](https://github.com/dionerazedev)
 
 ---
 

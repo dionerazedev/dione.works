@@ -1,0 +1,9 @@
+import { ArrowRight } from '@phosphor-icons/react';
+import { Link } from 'react-router-dom';
+import { PUBLISHED_BLOG_POSTS, formatBlogMonthYear } from '../data/blog';
+import { useRouteMetadata } from '../components/ui/useRouteMetadata';
+
+export const BlogPage = () => {
+  useRouteMetadata({ title: 'Blog | Dione Raze', description: 'Published writing and working notes about full-stack products, AI automation, and the journey behind the work.', canonicalPath: '/blog' });
+  return <article className="reading-page blog-index"><header className="page-header"><p className="page-label">Notebook / writing</p><h1>blog</h1><p>Notes on building products, automation systems, and the operational details around them.</p></header>{PUBLISHED_BLOG_POSTS.length === 0 && <div className="editorial-notice"><strong>No published articles yet.</strong><p>Published writing will appear here.</p></div>}<div className="post-list">{PUBLISHED_BLOG_POSTS.map((post) => <article key={post.slug}><Link to={`/blog/${post.slug}`} className="post-card" aria-label={`Open article: ${post.title}`}><div className={post.featuredImage ? 'post-card-layout has-image' : 'post-card-layout'}>{post.featuredImage && <div className="post-thumbnail"><img src={post.featuredImage.src} alt={post.featuredImage.alt} width={post.featuredImage.width} height={post.featuredImage.height} loading="lazy" decoding="async" /></div>}<div className="post-card-copy"><div className="post-meta">{post.category && <span>{post.category}</span>}{post.date && <time dateTime={post.date}>{formatBlogMonthYear(post.date)}</time>}{post.readingTime && <span>{post.readingTime}</span>}</div><h2>{post.title}</h2><p>{post.description}</p><div className="tag-row">{post.tags.map((tag) => <span key={tag}>{tag}</span>)}</div><span className="text-link">Read <ArrowRight size={13} /></span></div></div></Link></article>)}</div></article>;
+};

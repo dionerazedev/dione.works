@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-27T00:00:00.000Z",
+  "title": "Design System: Dione Raze Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "paper": { "role": "neutral", "displayName": "Field Paper", "canonical": "#f7f6f2" },
+      "ink": { "role": "neutral", "displayName": "Index Ink", "canonical": "#171714" },
+      "signal-yellow": { "role": "primary", "displayName": "Signal Yellow", "canonical": "#d8aa1d" },
+      "night": { "role": "neutral", "displayName": "Night Field", "canonical": "#11110f" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Identity Display", "purpose": "Names and case-study titles only." },
+      "body": { "displayName": "Editorial Body", "purpose": "Readable project and profile copy." },
+      "label": { "displayName": "Index Label", "purpose": "Numbers, dates, statuses, and technical metadata." }
+    },
+    "shadows": [
+      { "name": "dialog-only", "value": "0 28px 70px -32px rgba(23,23,20,0.35)", "purpose": "Dialogs, lightboxes, and floating overlays only." }
+    ],
+    "motion": [
+      { "name": "ease-editorial", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Short navigation, reveal, and media transitions." },
+      { "name": "duration-fast", "value": "180ms", "purpose": "Hover and active feedback." },
+      { "name": "duration-reveal", "value": "520ms", "purpose": "One-time section and preview reveals." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "rail", "value": "900px" },
+      { "name": "wide", "value": "1180px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Compact high-contrast action used sparingly.",
+      "html": "<button class=\"ds-button-primary\">VIEW PROJECT <span>↗</span></button>",
+      "css": ".ds-button-primary{min-height:44px;border:1px solid #171714;border-radius:3px;background:#171714;color:#f7f6f2;padding:12px 16px;font:520 10px/1.2 'Geist Mono',monospace;letter-spacing:.045em;transition:transform 180ms cubic-bezier(.16,1,.3,1)}.ds-button-primary:hover{transform:translateY(-1px)}.ds-button-primary:active{transform:translateY(1px)}.ds-button-primary:focus-visible{outline:2px solid #d8aa1d;outline-offset:3px}"
+    },
+    {
+      "name": "Index Navigation",
+      "kind": "nav",
+      "description": "Compact rail navigation with a technical active marker.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-active\" href=\"#\">01 Selected work</a><a href=\"#\">02 Experience</a><a href=\"#\">03 Stack</a></nav>",
+      "css": ".ds-nav{display:grid;gap:2px}.ds-nav a{min-height:36px;display:flex;align-items:center;color:#676761;text-decoration:none;font:500 10px 'Geist Mono',monospace}.ds-nav a:hover,.ds-nav .ds-nav-active{color:#171714}.ds-nav .ds-nav-active::before{width:5px;height:5px;margin-right:8px;border-radius:50%;background:#d8aa1d;content:''}.ds-nav a:focus-visible{outline:2px solid #d8aa1d;outline-offset:2px}"
+    },
+    {
+      "name": "Status Chip",
+      "kind": "chip",
+      "description": "A factual status label with a tiny signal point.",
+      "html": "<span class=\"ds-chip\"><i></i> LIVE PRODUCT</span>",
+      "css": ".ds-chip{display:inline-flex;min-height:24px;align-items:center;gap:6px;border:1px solid #deddd7;border-radius:3px;padding:3px 7px;color:#676761;font:520 9px 'Geist Mono',monospace}.ds-chip i{width:5px;height:5px;border-radius:50%;background:#d8aa1d}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Personal Field Index",
+    "overview": "A compact personal index in which identity stays close, evidence is catalogued precisely, and each section advances through a numbered editorial rhythm.",
+    "keyCharacteristics": ["Narrow desktop rail", "Centered evidence column", "Warm light-first paper", "Flat ruled surfaces", "Sparse yellow signals"],
+    "rules": [
+      { "name": "Signal Discipline", "body": "Yellow occupies far less than five percent of any viewport.", "section": "colors" },
+      { "name": "Flat Evidence", "body": "Prefer a ruled row to a card unless the content must behave as a discrete object.", "section": "elevation" }
+    ],
+    "dos": ["Keep project status explicit and factual.", "Use dividers and type scale to create rhythm."],
+    "donts": ["Do not use gradients, glass, or neon glows.", "Do not repeat one equal card pattern for every project."]
+  }
+}
