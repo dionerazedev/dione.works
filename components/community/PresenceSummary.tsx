@@ -12,7 +12,7 @@ export const PresenceSummary = ({ compact = false }: { compact?: boolean }) => {
   const { status, visitors } = useCommunityPresence();
   if (status === 'connecting') return <div className="presence-summary is-loading" aria-label="Connecting to live presence"><span /><span /><span /></div>;
   if (status !== 'connected') return <p className="presence-unavailable">Live presence unavailable</p>;
-  const visible = visitors.slice(0, 4);
+  const visible = visitors.slice(0, 3);
   const extra = Math.max(0, visitors.length - visible.length);
-  return <div className={`presence-summary ${compact ? 'is-compact' : ''}`}><div className="presence-avatars" aria-hidden="true">{visible.map((visitor) => <MonochromeAvatar key={visitor.visitorId} id={visitor.visitorId} label="Active visitor" />)}{extra > 0 && <span className="presence-extra">+{extra}</span>}</div><p>{visitors.length} {visitors.length === 1 ? 'person' : 'people'} viewing now</p></div>;
+  return <div className={`presence-summary ${compact ? 'is-compact' : ''}`}><div className="presence-avatars" aria-hidden="true">{visible.map((visitor) => <MonochromeAvatar key={visitor.visitorId} id={visitor.visitorId} label="Active visitor" />)}{extra > 0 && <span className="presence-extra">+{extra}</span>}</div><p><strong>{visitors.length}</strong> {visitors.length === 1 ? 'person' : 'people'} viewing now</p></div>;
 };

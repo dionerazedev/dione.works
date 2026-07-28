@@ -1,0 +1,6 @@
+<svg fill="none" role="img" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <title>Docker</title>
+  <path d="M20 65h74c-3 19-18 31-39 31-18 0-31-9-35-31Z" fill="#A3A3A3"/>
+  <path d="M95 58c8 0 13-4 16-11-8-2-14 0-19 5-3-7-8-12-16-15-1 8 2 14 9 21z" fill="#A3A3A3"/>
+  <path d="M34 35h11v11H34zm15 0h11v11H49zm15 0h11v11H64zM34 50h11v11H34zm15 0h11v11H49zm15 0h11v11H64zm15 0h11v11H79z" fill="#A3A3A3"/>
+</svg>

@@ -84,7 +84,8 @@
 .route-loading { display: grid; min-height: 60dvh; place-items: center; color: var(--muted); font: 10px "Geist Mono", monospace; text-transform: uppercase; }
 
 .desktop-sidebar { display: none; }
-.navigation-panel { display: flex; min-height: 100%; flex-direction: column; padding: 24px 18px; }
+.navigation-panel { display: flex; width: 100%; min-height: 100vh; flex-direction: column; padding: 24px 14px; }
+.navigation-main { width: 100%; flex: 0 0 auto; }
 .navigation-identity a { display: grid; text-decoration: none; }
 .navigation-identity strong { font-size: 14px; line-height: 1.2; }
 .navigation-identity span { margin-top: 4px; color: var(--muted); font: 10px "Geist Mono", monospace; }
@@ -94,32 +95,40 @@
 .navigation-primary a:hover, .navigation-primary a.is-active { color: var(--foreground); }
 .navigation-primary a.is-active::before { position: absolute; left: -12px; content: "→"; font-size: 9px; }
 .nav-divider { display: block; height: 1px; margin: 10px 0; background: var(--border); }
-.navigation-community, .navigation-settings, .navigation-external { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+.navigation-footer { display: grid; width: 100%; gap: 22px; margin-top: auto; padding-bottom: 24px; }
+.navigation-footer > * { min-width: 0; }
+.navigation-community, .navigation-settings { margin-top: 0; padding-top: 20px; border-top: 1px solid var(--border); }
+.navigation-external { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
 .ask-anything { display: flex; width: 100%; min-height: 44px; align-items: center; justify-content: space-between; border: 0; background: transparent; padding: 0; font: 12px "Geist Mono", monospace; cursor: pointer; }
 .ask-anything:hover { text-decoration: underline; }
 kbd { border: 1px solid var(--border-strong); border-radius: 4px; background: var(--surface); padding: 2px 5px; color: var(--muted); font-size: 8px; }
-.community-link { display: flex; min-height: 40px; align-items: center; gap: 8px; margin-top: 8px; color: var(--muted); font: 11px "Geist Mono", monospace; text-decoration: none; }
+.community-link { display: flex; min-height: 40px; align-items: center; gap: 8px; margin-top: 8px; color: var(--muted); font: 12px "Geist Mono", monospace; text-decoration: none; text-transform: lowercase; }
 .community-link:hover, .community-link.is-active { color: var(--foreground); }
 .sidebar-micro-label { display: block; margin-bottom: 9px; color: var(--faint); font: 9px "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; }
-.theme-controls { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
-.theme-controls button { min-height: 34px; border: 0; border-right: 1px solid var(--border); background: transparent; color: var(--muted); font: 9px "Geist Mono", monospace; text-transform: capitalize; cursor: pointer; }
+.navigation-settings { display: flex; align-items: center; gap: 10px; }
+.theme-controls { display: inline-grid; grid-template-columns: repeat(3, 28px); overflow: hidden; border: 1px solid var(--border); border-radius: 999px; background: var(--surface-elevated); }
+.theme-controls button { display: grid; width: 28px; min-height: 28px; place-items: center; border: 0; border-right: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; }
 .theme-controls button:last-child { border-right: 0; }
 .theme-controls button:hover { color: var(--foreground); }
-.theme-controls button.is-active { background: var(--foreground); color: var(--background); }
-.sound-toggle { display: flex; width: 100%; min-height: 38px; align-items: center; gap: 8px; margin-top: 8px; border: 0; background: transparent; padding: 0; color: var(--muted); font: 10px "Geist Mono", monospace; cursor: pointer; }
-.sound-toggle:hover { color: var(--foreground); }
+.theme-controls button.is-active { background: var(--surface); color: var(--foreground); }
+.sound-toggle { display: grid; width: 34px; height: 34px; place-items: center; border: 1px solid var(--border); border-radius: 50%; background: var(--surface-elevated); padding: 0; color: var(--muted); cursor: pointer; }
+.sound-toggle:hover { border-color: var(--border-strong); color: var(--foreground); }
 .navigation-external a { display: flex; min-height: 32px; align-items: center; justify-content: space-between; color: var(--muted); font: 11px "Geist Mono", monospace; text-decoration: none; }
 .navigation-external a:hover { color: var(--foreground); }
-.navigation-details { display: grid; gap: 5px; margin-top: auto; padding-top: 16px; color: var(--muted); font: 9px/1.55 "Geist Mono", monospace; }
-.navigation-details p, .navigation-details time { margin: 0; }
-.navigation-details > a { overflow-wrap: anywhere; }
+.navigation-details { display: grid; width: 100%; max-width: none; min-width: 0; gap: 8px; margin-top: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.navigation-details p, .navigation-details time { width: 100%; max-width: none; margin: 0; }
+.navigation-details > a { display: flex; width: 100%; max-width: none; min-height: 24px; align-items: center; gap: 8px; overflow: visible; color: var(--foreground); font: 12px "Geist Mono", monospace; text-decoration: none; white-space: nowrap; }
+.navigation-details > a svg { flex-shrink: 0; }
+.navigation-details > a:hover { text-decoration: underline; text-decoration-thickness: 1px; }
+.navigation-details time { color: var(--faint); font: 9px "Geist Mono", monospace; text-transform: uppercase; }
 .navigation-details > div { display: flex; flex-wrap: wrap; gap: 8px 12px; margin-top: 6px; }
 
-.presence-summary { min-height: 34px; margin-top: 10px; }
-.presence-summary p, .presence-unavailable { margin: 6px 0 0; color: var(--muted); font: 9px "Geist Mono", monospace; }
-.presence-avatars { display: flex; align-items: center; padding-left: 5px; }
+.presence-summary { min-height: 42px; margin-top: 0; }
+.presence-summary p, .presence-unavailable { margin: 7px 0 0; color: var(--muted); font: 12px "Geist", system-ui, sans-serif; }
+.presence-summary p strong { color: var(--foreground); font-weight: 600; }
+.presence-avatars { display: flex; align-items: center; padding-left: 7px; }
 .mono-avatar { position: relative; display: inline-block; flex: 0 0 auto; overflow: hidden; border: 1px solid var(--background); border-radius: 50%; background: var(--surface-secondary); }
-.mono-avatar.is-small { width: 24px; height: 24px; margin-left: -5px; }
+.mono-avatar.is-small { width: 25px; height: 25px; margin-left: -7px; }
 .mono-avatar.is-medium { width: 36px; height: 36px; }
 .mono-avatar i { position: absolute; top: 20%; left: 34%; width: 32%; height: 32%; border-radius: 50%; background: var(--foreground); }
 .mono-avatar b { position: absolute; bottom: -10%; left: 17%; width: 66%; height: 47%; border-radius: 50% 50% 0 0; background: var(--foreground); }
@@ -129,7 +138,7 @@ kbd { border: 1px solid var(--border-strong); border-radius: 4px; background: va
 .mono-avatar.pattern-4 b { left: 28%; width: 72%; }
 .mono-avatar.pattern-5 { background: var(--foreground); }
 .mono-avatar.pattern-5 i, .mono-avatar.pattern-5 b { background: var(--background); }
-.presence-extra { display: grid; width: 24px; height: 24px; place-items: center; margin-left: -5px; border: 1px solid var(--background); border-radius: 50%; background: var(--foreground); color: var(--background); font: 8px "Geist Mono", monospace; }
+.presence-extra { display: grid; min-width: 30px; height: 24px; place-items: center; margin-left: -7px; border: 1px solid var(--border); border-radius: 999px; background: var(--surface-elevated); color: var(--muted); padding-inline: 6px; font: 8px "Geist Mono", monospace; }
 .presence-summary.is-loading { display: flex; align-items: center; gap: 5px; }
 .presence-summary.is-loading span { width: 22px; height: 22px; border-radius: 50%; background: var(--surface-secondary); animation: pulse-opacity 1.8s ease-in-out infinite; }
 
@@ -317,12 +326,27 @@ kbd { border: 1px solid var(--border-strong); border-radius: 4px; background: va
 .article-pagination a:last-child { justify-content: flex-end; text-align: right; }
 .article-pagination small { display: block; color: var(--faint); font: 8px "Geist Mono", monospace; text-transform: uppercase; }
 .back-link { display: inline-flex; min-height: 44px; align-items: center; gap: 7px; color: var(--muted); font: 9px "Geist Mono", monospace; text-transform: uppercase; }
-.gear-list > section { display: grid; gap: 22px; padding: 30px 0; border-bottom: 1px solid var(--border); }
-.gear-list section > header { display: grid; grid-template-columns: 32px 1fr; }
-.gear-list header span { color: var(--faint); font: 9px "Geist Pixel", monospace; }
-.gear-list h2 { margin: 0; font-size: 18px; }
-.gear-list ul { margin: 0; padding: 0; border-top: 1px solid var(--border); list-style: none; }
-.gear-list li { display: flex; min-height: 42px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); font-size: 13px; }
+.gear-page { position: relative; width: min(100% - 32px, 848px); }
+.gear-dot-field { position: fixed; top: 72px; right: 7vw; width: min(32vw, 390px); height: 220px; background-image: radial-gradient(circle, var(--foreground) .72px, transparent .85px); background-size: 12px 12px; opacity: .08; mask-image: linear-gradient(115deg, transparent, black 28%, transparent 88%); pointer-events: none; }
+.gear-hero { max-width: 560px; border-bottom: 0; padding-bottom: 44px; }
+.gear-hero > p:last-child { max-width: 58ch; margin-top: 20px; font-size: 15px; line-height: 1.65; }
+.gear-list { display: grid; gap: 18px; }
+.gear-section { display: grid; gap: 14px; scroll-margin-top: 70px; }
+.gear-section + .gear-section { margin-top: 18px; }
+.gear-section h2 { margin: 0; }
+.gear-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.gear-card { min-width: 0; overflow: hidden; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-elevated); transition: border-color 200ms ease, transform 260ms cubic-bezier(.16,1,.3,1); }
+.gear-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+.gear-card-visual { position: relative; display: grid; aspect-ratio: 1 / 1; place-items: center; overflow: hidden; border-bottom: 1px solid var(--border); background: color-mix(in srgb, var(--surface) 62%, var(--background)); }
+.gear-card-visual::after { position: absolute; inset: auto 0 0; height: 36%; background-image: radial-gradient(circle, var(--foreground) .65px, transparent .85px); background-size: 9px 9px; opacity: .045; mask-image: linear-gradient(to top, black, transparent); content: ""; pointer-events: none; }
+.gear-card-visual img { position: relative; z-index: 1; display: block; width: 78%; height: 78%; object-fit: contain; filter: grayscale(1) contrast(1.04); transition: transform 420ms cubic-bezier(.16,1,.3,1), filter 420ms cubic-bezier(.16,1,.3,1); }
+.gear-card:hover .gear-card-visual img { transform: scale(1.035); filter: grayscale(1) contrast(1.08); }
+.gear-card-visual.is-product img { width: 88%; height: 88%; }
+.gear-card-visual.is-photo img { width: 100%; height: 100%; object-fit: cover; }
+.gear-card-visual.is-logo img { width: 56px; height: 56px; object-fit: contain; opacity: .86; }
+.gear-card-copy { display: grid; min-height: 78px; align-items: start; padding: 15px 16px 14px; }
+.gear-card h3 { margin: 0; overflow-wrap: anywhere; font-size: 13px; font-weight: 600; line-height: 1.25; letter-spacing: 0; }
+.gear-card p { margin: 6px 0 0; color: var(--muted); font-size: 12px; line-height: 1.35; }
 
 .community-header { display: grid; gap: 24px; padding-bottom: 36px; border-bottom: 1px solid var(--border); }
 .community-header > div:first-child > p:last-child { max-width: 60ch; margin: 18px 0 0; color: var(--muted); }
@@ -405,10 +429,10 @@ kbd { border: 1px solid var(--border-strong); border-radius: 4px; background: va
 .command-palette-footer { display: flex; min-height: 42px; flex-wrap: wrap; align-items: center; gap: 8px 14px; border-top: 1px solid var(--border); padding: 6px 12px; color: var(--faint); font: 8px "Geist Mono", monospace; }
 .command-feedback { margin-left: auto; }
 .mobile-menu-layer { position: fixed; inset: 0; z-index: 90; background: var(--background); }
-.mobile-menu { height: 100dvh; overflow-y: auto; background: var(--background); }
+.mobile-menu { width: 100%; height: 100dvh; overflow-x: hidden; overflow-y: auto; background: var(--background); }
 .mobile-menu-header { position: sticky; top: 0; z-index: 1; display: flex; min-height: calc(58px + env(safe-area-inset-top)); align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); background: var(--background); padding: env(safe-area-inset-top) max(10px, env(safe-area-inset-right)) 0 max(18px, env(safe-area-inset-left)); }
 .mobile-menu-header h1 { margin: 0; font: 10px "Geist Mono", monospace; text-transform: uppercase; }
-.mobile-menu .navigation-panel { min-height: calc(100dvh - 58px); padding: 24px 18px 36px; }
+.mobile-menu .navigation-panel { min-height: calc(100dvh - 58px); padding: 24px 16px 36px; }
 .lightbox-layer { z-index: 120; }
 .lightbox-dialog { position: relative; display: flex; max-width: min(96vw, 1400px); max-height: calc(100dvh - 24px); flex-direction: column; align-items: flex-end; gap: 7px; }
 .lightbox-close { display: inline-flex; min-height: 44px; align-items: center; gap: 6px; border: 0; background: transparent; color: var(--foreground); font: 9px "Geist Mono", monospace; cursor: pointer; text-transform: uppercase; }
@@ -475,8 +499,8 @@ kbd { border: 1px solid var(--border-strong); border-radius: 4px; background: va
 }
 
 @media (min-width: 1024px) {
-  .desktop-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 60; display: block; width: 224px; overflow-y: auto; border-right: 1px solid var(--border); background: var(--background); }
-  .workspace { margin-left: 224px; }
+  .desktop-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 60; display: block; width: 240px; min-height: 100vh; overflow-x: hidden; overflow-y: auto; border-right: 1px solid var(--border); background: var(--background); }
+  .workspace { margin-left: 240px; }
   .mobile-topbar { display: none; }
   .editor-document { padding-inline: 24px; }
   .hero-section { min-height: 0; padding-top: 64px; padding-bottom: 42px; }
@@ -508,6 +532,20 @@ kbd { border: 1px solid var(--border-strong); border-radius: 4px; background: va
   .post-card-layout.has-image { grid-template-columns: 1fr; gap: 20px; }
   .article-pagination { grid-template-columns: 1fr; }
   .article-pagination a:last-child { justify-content: flex-start; text-align: left; }
+  .gear-page { width: min(100% - 28px, 420px); padding-top: 54px; }
+  .gear-dot-field { position: absolute; top: 20px; right: 10px; width: 190px; height: 140px; }
+  .gear-hero { padding-bottom: 36px; }
+  .gear-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .gear-card-copy { min-height: 116px; padding: 13px; }
+  .gear-card h3 { font-size: 12px; }
+  .gear-card p { font-size: 11px; line-height: 1.42; }
+}
+
+@media (max-width: 359px) {
+  .gear-grid { grid-template-columns: 1fr; }
+  .gear-card { display: grid; grid-template-columns: 118px minmax(0, 1fr); }
+  .gear-card-visual { aspect-ratio: auto; min-height: 118px; border-right: 1px solid var(--border); border-bottom: 0; }
+  .gear-card-copy { min-height: 118px; }
 }
 
 @media (pointer: coarse) {

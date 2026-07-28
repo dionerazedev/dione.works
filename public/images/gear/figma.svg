@@ -1,0 +1,4 @@
+<svg fill="none" role="img" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <title>Figma</title>
+  <path d="M60 20h15a15 15 0 0 1 0 30H60zm0 30h15a15 15 0 1 1-15 15zm-15 0h15v30H45a15 15 0 0 1 0-30Zm0-30h15v30H45a15 15 0 0 1 0-30Zm0 60h15v15a15 15 0 1 1-15-15Z" stroke="#A3A3A3" stroke-linejoin="round" stroke-width="8"/>
+</svg>
