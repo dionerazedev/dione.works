@@ -1,8 +1,9 @@
 import { BookOpen, Laptop } from 'lucide-react';
-import { ChatCircleDots, EnvelopeSimple, SpeakerHigh, SpeakerSlash } from '@phosphor-icons/react';
+import { ChatCircleDots, EnvelopeSimple } from '@phosphor-icons/react';
 import { Link, useLocation } from 'react-router-dom';
 import { PROFILE_LINKS, SECTION_NAVIGATION } from '../../data/navigation';
 import { useSoundPreference } from '../../hooks/useSoundPreference';
+import { SidebarPlayground } from '../playground/SidebarPlayground';
 import { ThemeControls } from '../theme';
 import { PresenceSummary } from '../community/PresenceSummary';
 import { useActiveSection } from '../ui/useActiveSection';
@@ -25,6 +26,8 @@ export const NavigationPanel = ({ currentTime, onNavigate }: { currentTime: stri
         <span className="nav-divider" aria-hidden="true" />
         {SECTION_NAVIGATION.map((item) => <a key={item.id} href={`/#${item.id}`} onClick={(event) => goToSection(event, item.id)} className={location.pathname === '/' && activeSection === item.id ? 'is-active' : ''}>{item.label}</a>)}
       </nav>
+
+      <SidebarPlayground soundEnabled={soundEnabled} onToggleSound={toggleSound} />
     </div>
 
     <div className="navigation-footer">
@@ -35,7 +38,6 @@ export const NavigationPanel = ({ currentTime, onNavigate }: { currentTime: stri
 
       <div className="navigation-settings">
         <ThemeControls />
-        <button type="button" className="sound-toggle" onClick={toggleSound} aria-label={`Turn sound ${soundEnabled ? 'off' : 'on'}`} aria-pressed={soundEnabled} title={`Sound ${soundEnabled ? 'on' : 'off'}`}>{soundEnabled ? <SpeakerHigh size={14} /> : <SpeakerSlash size={14} />}</button>
       </div>
 
       <div className="navigation-details">

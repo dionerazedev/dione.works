@@ -10,7 +10,7 @@ export const MonochromeAvatar = ({ id, label, size = 'small' }: { id: string; la
 
 export const PresenceSummary = ({ compact = false }: { compact?: boolean }) => {
   const { status, visitors } = useCommunityPresence();
-  if (status === 'connecting') return <div className="presence-summary is-loading" aria-label="Connecting to live presence"><span /><span /><span /></div>;
+  if (status === 'connecting') return <div className="presence-summary is-loading" role="status" aria-label="Connecting to live presence"><span /><span /><span /></div>;
   if (status !== 'connected') return <p className="presence-unavailable">Live presence unavailable</p>;
   const visible = visitors.slice(0, 3);
   const extra = Math.max(0, visitors.length - visible.length);

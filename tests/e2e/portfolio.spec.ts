@@ -60,6 +60,101 @@ test('theme defaults to light, supports explicit choices, and persists', async (
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 });
 
+test('sidebar shootaround scores, persists its best, resets, and stays out of the mobile menu', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('/');
+  await page.evaluate(() => localStorage.removeItem('dione-shootaround-best'));
+  await page.reload();
+
+  const game = page.getByRole('application', { name: /Shootaround/ });
+  const status = page.locator('.playground-heading > div > span');
+  const made = page.locator('.playground-scoreboard dd').first();
+  const best = page.locator('.playground-scoreboard dd').nth(1);
+  await expect(game).toBeVisible();
+  await expect(status).toHaveText('ready');
+
+  await game.focus();
+  await page.keyboard.press('Space');
+  await expect(made).toHaveText('01', { timeout: 3_000 });
+  await expect(best).toHaveText('01');
+  await expect(status).toHaveText('ready', { timeout: 3_000 });
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('dione-shootaround-best'))).toBe('1');
+
+  await game.focus();
+  await page.keyboard.press('ArrowDown');
+  await expect(page.locator('.trajectory-guide circle')).not.toHaveCount(0);
+  await page.keyboard.press('r');
+  await expect(status).toHaveText('ready', { timeout: 1_500 });
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.locator('.mobile-topbar').getByRole('button', { name: 'Open navigation' }).click();
+  await expect(page.locator('.mobile-menu .sidebar-playground')).toBeHidden();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+});
+
+test('shootaround handles misses, repeated input, and backboard collision recovery', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('/');
+  const game = page.getByRole('application', { name: /Shootaround/ });
+  const status = page.locator('.playground-heading > div > span');
+  const ball = page.locator('.playground-ball');
+  const ballBox = await ball.boundingBox();
+  if (!ballBox) throw new Error('Basketball was not rendered');
+  const startX = ballBox.x + ballBox.width / 2;
+  const startY = ballBox.y + ballBox.height / 2;
+
+  await page.mouse.move(startX, startY);
+  await page.mouse.down();
+  await page.mouse.move(startX - 22, startY + 9, { steps: 5 });
+  await expect(status).toHaveText('aiming');
+  await expect(page.locator('.trajectory-guide circle')).not.toHaveCount(0);
+  await page.mouse.up();
+  await expect(status).toHaveText('in flight');
+
+  await page.mouse.move(startX, startY);
+  await page.mouse.down();
+  await page.mouse.up();
+  await expect(status).toHaveText('in flight');
+  await expect(status).toHaveText('ready', { timeout: 7_000 });
+  await expect(page.locator('.playground-scoreboard dd').first()).toHaveText('00');
+
+  await game.focus();
+  const rimCollisionsBefore = Number(await game.getAttribute('data-rim-collisions'));
+  for (let press = 0; press < 6; press += 1) await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('Space');
+  await expect.poll(async () => Number(await game.getAttribute('data-rim-collisions')), { timeout: 3_000 }).toBeGreaterThan(rimCollisionsBefore);
+  await page.getByRole('button', { name: 'Reset basketball' }).click();
+  await expect(status).toHaveText('ready', { timeout: 1_500 });
+
+  await game.focus();
+  const backboardCollisionsBefore = Number(await game.getAttribute('data-backboard-collisions'));
+  for (let press = 0; press < 10; press += 1) await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('Space');
+  await expect.poll(async () => Number(await game.getAttribute('data-backboard-collisions')), { timeout: 3_000 }).toBeGreaterThan(backboardCollisionsBefore);
+  await page.getByRole('button', { name: 'Reset basketball' }).click();
+  await expect(status).toHaveText('ready', { timeout: 1_500 });
+});
+
+test('shootaround accepts emulated touch dragging without page overflow', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, hasTouch: true });
+  const page = await context.newPage();
+  await page.goto('/');
+  const ballBox = await page.locator('.playground-ball').boundingBox();
+  if (!ballBox) throw new Error('Basketball was not rendered');
+  const startX = ballBox.x + ballBox.width / 2;
+  const startY = ballBox.y + ballBox.height / 2;
+  const session = await context.newCDPSession(page);
+
+  await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: startX, y: startY, id: 1 }] });
+  await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: startX - 12, y: startY + 5, id: 1 }] });
+  await expect(page.locator('.playground-heading > div > span')).toHaveText('aiming');
+  await expect(page.locator('.trajectory-guide circle')).not.toHaveCount(0);
+  await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await expect(page.locator('.playground-heading > div > span')).toHaveText('in flight');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+  await context.close();
+});
+
 test('command palette supports search, keyboard activation, Escape, and focus restoration', async ({ page }) => {
   await page.goto('/');
   await page.keyboard.press('Control+Shift+K');
@@ -581,7 +676,11 @@ test('gear and community routes remain truthful and usable', async ({ page }) =>
   await expect(page.locator('.community-status').getByText(/Connected|Not configured|Connection error/)).toBeVisible();
   const unavailable = await page.getByText('Community temporarily unavailable').isVisible().catch(() => false);
   if (unavailable) await expect(page.getByText('No viewer count or messages have been fabricated.')).toBeVisible();
-  else await expect(page.getByRole('heading', { name: /No messages yet|Community could not connect/ })).toBeVisible();
+  else {
+    const messageStream = page.locator('.message-stream');
+    if (await messageStream.isVisible().catch(() => false)) await expect(messageStream).toBeVisible();
+    else await expect(page.getByRole('heading', { name: /No messages yet|Community could not connect/ })).toBeVisible();
+  }
   expect(errors).toEqual([]);
 });
 

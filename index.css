@@ -123,6 +123,41 @@ kbd { border: 1px solid var(--border-strong); border-radius: 4px; background: va
 .navigation-details time { color: var(--faint); font: 9px "Geist Mono", monospace; text-transform: uppercase; }
 .navigation-details > div { display: flex; flex-wrap: wrap; gap: 8px 12px; margin-top: 6px; }
 
+.sidebar-playground { min-width: 0; margin-top: 18px; padding-top: 17px; border-top: 1px solid var(--border); }
+.playground-heading { display: grid; gap: 1px; }
+.playground-heading .sidebar-micro-label { margin-bottom: 5px; }
+.playground-heading > div { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.playground-heading strong { font: 500 10px "Geist Mono", monospace; letter-spacing: .01em; text-transform: lowercase; }
+.playground-heading > div > span { color: var(--faint); font: 8px "Geist Mono", monospace; text-transform: lowercase; }
+.basketball-court { display: block; width: 100%; height: auto; aspect-ratio: 204 / 126; overflow: visible; margin-top: 7px; color: var(--foreground); cursor: crosshair; user-select: none; }
+.basketball-court:focus-visible { outline-offset: 2px; }
+.court-dot-grid { opacity: .2; }
+.court-dot { fill: var(--muted); }
+.court-floor { fill: none; stroke: var(--border-strong); stroke-width: .8; }
+.playground-ball { fill: var(--foreground); stroke: var(--background); stroke-width: .65; cursor: grab; touch-action: none; }
+.playground-ball path { fill: none; stroke: var(--background); stroke-width: .65; opacity: .72; }
+.playground-ball.is-dragging { cursor: grabbing; }
+.playground-backboard, .playground-rim path, .playground-rim circle, .playground-net path { fill: none; stroke: var(--foreground); stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.playground-backboard { stroke-width: 1.05; }
+.playground-rim path, .playground-rim circle { stroke-width: 1.15; }
+.playground-net { transform-box: fill-box; transform-origin: top center; }
+.playground-net path { stroke: var(--muted); stroke-width: .7; }
+.trajectory-guide { fill: var(--foreground); opacity: .24; }
+.playground-rim.is-hit { animation: rim-nudge 180ms cubic-bezier(.16,1,.3,1); transform-box: fill-box; transform-origin: right center; }
+.playground-hoop.is-made .playground-net { animation: net-swish 430ms cubic-bezier(.16,1,.3,1); }
+.playground-scoreboard { display: flex; min-height: 28px; align-items: end; justify-content: space-between; gap: 10px; margin-top: 3px; color: var(--faint); font: 8px "Geist Mono", monospace; }
+.playground-scoreboard > span { padding-bottom: 2px; }
+.playground-scoreboard dl { display: flex; gap: 10px; margin: 0; }
+.playground-scoreboard dl > div { display: grid; grid-template-columns: auto auto; gap: 4px; align-items: baseline; }
+.playground-scoreboard dt { text-transform: lowercase; }
+.playground-scoreboard dd { margin: 0; color: var(--foreground); font-size: 10px; font-variant-numeric: tabular-nums; }
+.playground-controls { display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px; }
+.playground-controls button { display: inline-flex; min-height: 26px; align-items: center; gap: 4px; border: 0; background: transparent; padding: 0; color: var(--faint); font: 8px "Geist Mono", monospace; cursor: pointer; text-transform: lowercase; }
+.playground-controls button:hover { color: var(--foreground); }
+
+@keyframes rim-nudge { 45% { transform: translateX(1.5px) rotate(1deg); } }
+@keyframes net-swish { 35% { transform: scaleX(.72) skewX(-5deg); } 70% { transform: scaleX(1.08) skewX(2deg); } }
+
 .presence-summary { min-height: 42px; margin-top: 0; }
 .presence-summary p, .presence-unavailable { margin: 7px 0 0; color: var(--muted); font: 12px "Geist", system-ui, sans-serif; }
 .presence-summary p strong { color: var(--foreground); font-weight: 600; }
@@ -433,6 +468,7 @@ kbd { border: 1px solid var(--border-strong); border-radius: 4px; background: va
 .mobile-menu-header { position: sticky; top: 0; z-index: 1; display: flex; min-height: calc(58px + env(safe-area-inset-top)); align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); background: var(--background); padding: env(safe-area-inset-top) max(10px, env(safe-area-inset-right)) 0 max(18px, env(safe-area-inset-left)); }
 .mobile-menu-header h1 { margin: 0; font: 10px "Geist Mono", monospace; text-transform: uppercase; }
 .mobile-menu .navigation-panel { min-height: calc(100dvh - 58px); padding: 24px 16px 36px; }
+.mobile-menu .sidebar-playground { display: none; }
 .lightbox-layer { z-index: 120; }
 .lightbox-dialog { position: relative; display: flex; max-width: min(96vw, 1400px); max-height: calc(100dvh - 24px); flex-direction: column; align-items: flex-end; gap: 7px; }
 .lightbox-close { display: inline-flex; min-height: 44px; align-items: center; gap: 6px; border: 0; background: transparent; color: var(--foreground); font: 9px "Geist Mono", monospace; cursor: pointer; text-transform: uppercase; }
