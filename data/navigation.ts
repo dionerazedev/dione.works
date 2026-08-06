@@ -7,6 +7,7 @@ export type SectionId =
   | 'tech-stack'
   | 'services'
   | 'certifications'
+  | 'outside-ide'
   | 'github'
   | 'contact';
 
@@ -23,6 +24,7 @@ export const SECTION_NAVIGATION: readonly NavigationItem[] = [
   { label: 'Stack', id: 'tech-stack', href: '#tech-stack', ariaLabel: 'Go to technology stack' },
   { label: 'Experience', id: 'experience', href: '#experience', ariaLabel: 'Go to experience' },
   { label: 'Capabilities', id: 'services', href: '#services', ariaLabel: 'Go to capabilities' },
+  { label: 'Outside', id: 'outside-ide', href: '#outside-ide', ariaLabel: 'Go to Outside the IDE' },
   { label: 'Contact', id: 'contact', href: '#contact', ariaLabel: 'Go to contact options' },
 ];
 

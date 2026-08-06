@@ -313,6 +313,16 @@ kbd { border: 1px solid var(--border-strong); border-radius: 4px; background: va
 .capability-list li { display: flex; gap: 8px; color: var(--muted); font-size: 12px; }
 .capability-list li svg { flex: 0 0 auto; margin-top: 5px; }
 
+.outside-ide-section { overflow: clip; }
+.outside-ide-layout { display: grid; gap: 34px; align-items: center; }
+.outside-ide-copy { min-width: 0; }
+.outside-ide-copy h2 { max-width: 18ch; margin: 0; font-size: clamp(1.65rem, 4vw, 2.25rem); font-weight: 600; letter-spacing: -.025em; line-height: 1.08; text-wrap: balance; }
+.outside-ide-copy > p { max-width: 56ch; margin: 20px 0 0; color: var(--muted); font-size: 15px; line-height: 1.72; }
+.outside-ide-tags { display: flex; flex-wrap: wrap; gap: 7px; margin: 22px 0 0; padding: 0; list-style: none; }
+.outside-ide-tags li { display: inline-flex; min-height: 30px; align-items: center; border: 1px solid var(--border); border-radius: 999px; padding: 0 12px; color: var(--muted); font: 10px "Geist Mono", monospace; }
+.outside-ide-carousel { position: relative; min-height: 396px; }
+.outside-ide-carousel::before { position: absolute; inset: 12% 4% 9% 22%; background-image: radial-gradient(circle, var(--foreground) .7px, transparent .9px); background-size: 9px 9px; opacity: .08; mask-image: radial-gradient(ellipse at 54% 50%, black, transparent 72%); content: ""; pointer-events: none; }
+
 .contact-layout { display: grid; gap: 30px; }
 .contact-layout > div:first-child > p:first-child { max-width: 60ch; margin: 0; color: var(--muted); }
 .contact-command { margin: 18px 0 0; overflow-wrap: anywhere; font: 10px "Geist Mono", monospace; }
@@ -538,6 +548,8 @@ kbd { border: 1px solid var(--border-strong); border-radius: 4px; background: va
   .project-feature:nth-child(even) .project-image-button { order: 2; }
   .subsection-heading { grid-template-columns: 1fr auto; align-items: end; }
   .experience-layout { grid-template-columns: minmax(0, 1.2fr) minmax(260px, .8fr); gap: 60px; }
+  .outside-ide-layout { grid-template-columns: minmax(0, .92fr) minmax(320px, 1.08fr); gap: 56px; }
+  .outside-ide-carousel { min-height: 430px; }
   .community-header { grid-template-columns: 1fr auto; }
   .contact-layout { grid-template-columns: 1fr auto; align-items: start; }
   .contact-links { grid-column: 1 / -1; }
@@ -606,6 +618,13 @@ kbd { border: 1px solid var(--border-strong); border-radius: 4px; background: va
   .tech-stack-groups { gap: 32px; }
   .tech-chip-list { gap: 7px; }
   .tech-chip-list span { min-height: 32px; padding-inline: 11px; font-size: 11px; white-space: normal; }
+  .outside-ide-layout { gap: 28px; }
+  .outside-ide-copy > p { font-size: 14px; }
+  .outside-ide-tags li { min-height: 32px; }
+  .outside-ide-carousel { min-height: 360px; margin-inline: -10px; }
+  .depth-carousel__arrow { width: 38px; height: 38px; }
+  .depth-carousel__arrow--prev { left: 12px; }
+  .depth-carousel__arrow--next { right: 12px; }
   .contact-primary .button { width: 100%; }
   .site-footer { width: calc(100% - 32px); align-items: flex-start; flex-direction: column; padding: 28px 0; }
   .site-footer nav { justify-content: flex-start; }
@@ -629,7 +648,11 @@ kbd { border: 1px solid var(--border-strong); border-radius: 4px; background: va
 }
 
 @media (pointer: coarse) {
-  .navigation-primary a, .navigation-external a, .community-link, .sound-toggle, .project-actions a, .automation-actions a, .contact-links a, .site-footer a { min-height: 44px; }
+  .navigation-primary a, .navigation-external a, .community-link, .sound-toggle, .project-actions a, .automation-actions a, .contact-links a, .site-footer a, .depth-carousel__dot { min-height: 44px; }
+  .depth-carousel__dot { width: 44px; border-radius: 999px; background: transparent; }
+  .depth-carousel__dot::before { display: block; width: 7px; height: 7px; margin: auto; border-radius: 999px; background: var(--border-strong); content: ""; }
+  .depth-carousel__dot.is-active { width: 44px; background: transparent; }
+  .depth-carousel__dot.is-active::before { width: 20px; background: var(--foreground); }
 }
 
 @media (prefers-reduced-motion: reduce) {

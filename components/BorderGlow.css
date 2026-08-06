@@ -1,0 +1,134 @@
+.border-glow-card {
+  --edge-proximity: 0;
+  --cursor-angle: 45deg;
+  --edge-sensitivity: 35;
+  --color-sensitivity: calc(var(--edge-sensitivity) + 22);
+  --border-radius: 12px;
+  --glow-padding: 18px;
+  --cone-spread: 18;
+  --fill-opacity: .08;
+
+  position: relative;
+  display: block;
+  min-width: 0;
+  overflow: visible;
+  border-radius: var(--border-radius);
+  background: var(--card-bg, var(--background));
+  isolation: isolate;
+  outline: 1px solid var(--border-color, var(--border));
+  outline-offset: -1px;
+  transform: translate3d(0, 0, 0);
+}
+
+.border-glow-card::before,
+.border-glow-card::after,
+.border-glow-card > .edge-light {
+  position: absolute;
+  border-radius: inherit;
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.border-glow-card::before,
+.border-glow-card::after {
+  inset: 0;
+  z-index: 0;
+}
+
+.border-glow-card::before {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--card-bg, var(--background)) 0 100%) padding-box,
+    var(--gradient-one) border-box,
+    var(--gradient-two) border-box,
+    var(--gradient-three) border-box,
+    var(--gradient-four) border-box,
+    var(--gradient-five) border-box,
+    var(--gradient-six) border-box,
+    var(--gradient-seven) border-box,
+    var(--gradient-base) border-box;
+  mask-image:
+    conic-gradient(
+      from var(--cursor-angle) at center,
+      black calc(var(--cone-spread) * 1%),
+      transparent calc((var(--cone-spread) + 14) * 1%),
+      transparent calc((100 - var(--cone-spread) - 14) * 1%),
+      black calc((100 - var(--cone-spread)) * 1%)
+    );
+  opacity: max(0, calc((var(--edge-proximity) - var(--edge-sensitivity)) / (100 - var(--edge-sensitivity))));
+}
+
+.border-glow-card::after {
+  background:
+    var(--gradient-one),
+    var(--gradient-two),
+    var(--gradient-three),
+    var(--gradient-four),
+    var(--gradient-five),
+    var(--gradient-six),
+    var(--gradient-seven),
+    var(--gradient-base);
+  mask-image:
+    radial-gradient(ellipse at 50% 50%, black 42%, transparent 68%),
+    conic-gradient(from var(--cursor-angle) at center, transparent 8%, black 18%, black 82%, transparent 92%);
+  mask-composite: intersect;
+  mix-blend-mode: soft-light;
+  opacity: max(0, calc(var(--fill-opacity) * (var(--edge-proximity) - var(--color-sensitivity)) / (100 - var(--color-sensitivity))));
+}
+
+.border-glow-card > .edge-light {
+  inset: calc(var(--glow-padding) * -1);
+  z-index: 0;
+  mask-image:
+    conic-gradient(
+      from var(--cursor-angle) at center,
+      black 3%,
+      transparent 10%,
+      transparent 90%,
+      black 97%
+    );
+  opacity: max(0, calc((var(--edge-proximity) - var(--edge-sensitivity)) / (100 - var(--edge-sensitivity))));
+}
+
+.border-glow-card > .edge-light::before {
+  position: absolute;
+  inset: var(--glow-padding);
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 0 1px var(--glow-color),
+    inset 0 0 8px 0 var(--glow-color-30),
+    0 0 1px 0 var(--glow-color-50),
+    0 0 8px 0 var(--glow-color-30),
+    0 0 18px 0 var(--glow-color-10);
+  content: "";
+}
+
+.border-glow-inner {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.project-image-glow {
+  --migo-project-image-background: #f7f7f7;
+  width: 100%;
+  overflow: clip;
+}
+
+.project-image-glow .border-glow-inner {
+  display: block;
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .border-glow-card {
+    --edge-proximity: 0 !important;
+  }
+
+  .border-glow-card::before,
+  .border-glow-card::after,
+  .border-glow-card > .edge-light {
+    display: none;
+  }
+}

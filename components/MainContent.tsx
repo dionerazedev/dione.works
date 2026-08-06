@@ -8,6 +8,7 @@ import { CurrentWorkSection } from './sections/CurrentWorkSection';
 import { ExperienceSection } from './sections/ExperienceSection';
 import { FeaturedProjectsSection } from './sections/FeaturedProjectsSection';
 import { HeroSection } from './sections/HeroSection';
+import { OutsideIDESection } from './sections/OutsideIDESection';
 import { ServicesSection } from './sections/ServicesSection';
 import { StatsSection } from './sections/StatsSection';
 import { EditorCanvas } from './ui/EditorCanvas';
@@ -22,5 +23,5 @@ export const MainContent = () => {
     const frame = requestAnimationFrame(() => document.getElementById(location.hash.slice(1))?.scrollIntoView({ block: 'start' }));
     return () => cancelAnimationFrame(frame);
   }, [location.hash]);
-  return <EditorCanvas><HeroSection /><StatsSection /><BlogPreviewSection /><FeaturedProjectsSection onPreview={setSelectedImage} /><CurrentWorkSection /><ExperienceSection /><ServicesSection /><ContactSection /><ImageLightbox image={selectedImage} isOpen={selectedImage !== null} onClose={() => setSelectedImage(null)} /></EditorCanvas>;
+  return <EditorCanvas><HeroSection /><StatsSection /><BlogPreviewSection /><FeaturedProjectsSection onPreview={setSelectedImage} /><CurrentWorkSection /><ExperienceSection /><ServicesSection /><OutsideIDESection /><ContactSection /><ImageLightbox image={selectedImage} isOpen={selectedImage !== null} onClose={() => setSelectedImage(null)} /></EditorCanvas>;
 };
