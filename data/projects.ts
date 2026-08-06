@@ -44,24 +44,6 @@ const MIGO_PROJECT: ProjectData = {
     'A live product that demonstrates an end-to-end travel experience across interface design, application logic, data, social features, and AI assistance.',
   images: [
     {
-      src: '/images/projects/migo-desktop.webp',
-      alt: 'Migo desktop web experience showing travel discovery, traveler stories, and saved places',
-      width: 1440,
-      height: 1000,
-      label: 'Desktop product',
-      kind: 'desktop',
-      href: 'https://migo-rust.vercel.app/',
-    },
-    {
-      src: '/images/projects/migo-mobile-discovery.webp',
-      alt: 'Migo mobile discovery screen with travel stories and local places',
-      width: 430,
-      height: 932,
-      label: 'Mobile product',
-      kind: 'mobile',
-      href: 'https://migo-rust.vercel.app/',
-    },
-    {
       src: '/images/projects/migo-ai-travel-buddy.webp',
       alt: 'Migo poster introducing the AI travel assistant with route, budget, packing, and local discovery tools',
       width: 941,
@@ -390,6 +372,70 @@ const PEAK_ATHLETICS_PROJECT: ProjectData = {
       label: 'Desktop storefront',
       kind: 'desktop',
       href: 'https://peak-athletics-xhp79eca.myshopify.com/',
+    },
+  ],
+};
+
+const POP_HAUS_PROJECT: ProjectData = {
+  id: 'pop-haus',
+  slug: 'pop-haus',
+  title: 'Pop Haus',
+  category: 'Event Rental Website',
+  type: 'Service Business Website',
+  tag: 'Next.js + Responsive UX',
+  status: 'Live Product',
+  deploymentStatus: 'Live deployment',
+  description:
+    'A responsive service website for Pop Haus, presenting party rentals, balloon decor, packages, pricing, gallery proof, bilingual support, and booking paths for Charlotte events.',
+  imageUrl: '/images/projects/pop-haus-desktop.png',
+  imageAlt: 'Pop Haus desktop homepage showing event rental headline, navigation, party setup photography, and booking actions',
+  imageWidth: 1440,
+  imageHeight: 1000,
+  liveUrl: 'https://pop-haus-gamma.vercel.app/',
+  role: 'Responsive frontend implementation, service structure, pricing presentation, and booking path design',
+  stack: ['Next.js', 'Responsive UX', 'CSS', 'Vercel'],
+  problem:
+    'Pop Haus needed to present rentals and balloon decor together without making visitors jump between disconnected service pages, pricing lists, gallery examples, and contact paths.',
+  solution: [
+    'Combined party rentals and balloon decor into one service-focused landing experience.',
+    'Structured rental categories, package offers, balloon service pricing, gallery proof, and contact actions into clear sections.',
+    'Designed desktop and mobile layouts that keep booking actions and service details easy to reach.',
+    'Used real event imagery and service copy from the live Pop Haus site to make the offering immediately understandable.',
+  ],
+  technicalCapabilities: [
+    'Responsive service-business landing page',
+    'Sticky navigation and mobile menu',
+    'Rental catalog and pricing sections',
+    'Balloon decor service presentation',
+    'Event gallery and proof sections',
+    'Booking and contact call-to-action paths',
+    'Bilingual support messaging',
+  ],
+  measuredResults: [],
+  expectedBenefits: [
+    'Helps visitors understand the full Pop Haus service range from one page.',
+    'Reduces friction between browsing rentals, reviewing balloon decor, and starting an event inquiry.',
+  ],
+  outcome:
+    'A live event-service website that positions Pop Haus as a single party destination for rentals, balloons, setup, and event inquiries in Charlotte, NC.',
+  images: [
+    {
+      src: '/images/projects/pop-haus-desktop.png',
+      alt: 'Pop Haus desktop homepage with event rental hero, navigation, service photography, and trust rail',
+      width: 1440,
+      height: 1000,
+      label: 'Desktop homepage',
+      kind: 'desktop',
+      href: 'https://pop-haus-gamma.vercel.app/',
+    },
+    {
+      src: '/images/projects/pop-haus-mobile.png',
+      alt: 'Pop Haus mobile homepage showing event setup image, headline, service actions, and trust content',
+      width: 430,
+      height: 932,
+      label: 'Mobile homepage',
+      kind: 'mobile',
+      href: 'https://pop-haus-gamma.vercel.app/',
     },
   ],
 };
@@ -759,6 +805,7 @@ const CORE_PROJECTS: ProjectData[] = [
   LAAG_BUKIDNON_PROJECT,
   NARRA_ESTATES_PROJECT,
   PEAK_ATHLETICS_PROJECT,
+  POP_HAUS_PROJECT,
 ];
 
 export const ALL_PROJECTS: ProjectData[] = [...CORE_PROJECTS, ...AUTOMATION_PROJECTS];
@@ -772,6 +819,7 @@ const FEATURED_PROJECT_IDS = [
   'laag-bukidnon',
   'narra-estates',
   'peak-athletics',
+  'pop-haus',
 ] as const;
 
 export const FEATURED_PROJECTS = FEATURED_PROJECT_IDS

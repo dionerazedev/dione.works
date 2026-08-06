@@ -42,6 +42,11 @@ const ScrollReveal = ({
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reducedMotion) return undefined;
 
+    const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+    const wordYOffset = coarsePointer ? 6 : 12;
+    const animationDuration = coarsePointer ? 0.5 : 0.7;
+    const wordStagger = coarsePointer ? 0.008 : 0.015;
+    const blurAmount = coarsePointer ? Math.min(blurStrength, 1.5) : blurStrength;
     const scroller = scrollContainerRef?.current ?? window;
     const wordElements = el.querySelectorAll('.word');
     const ctx = gsap.context(() => {
@@ -51,6 +56,7 @@ const ScrollReveal = ({
         {
           ease: 'power3.out',
           rotate: 0,
+          immediateRender: false,
           scrollTrigger: {
             trigger: el,
             scroller,
@@ -64,13 +70,14 @@ const ScrollReveal = ({
 
       gsap.fromTo(
         wordElements,
-        { opacity: baseOpacity, y: 12, willChange: 'opacity, transform, filter' },
+        { opacity: baseOpacity, y: wordYOffset, willChange: 'opacity, transform, filter' },
         {
           ease: 'power3.out',
           opacity: 1,
           y: 0,
-          duration: 0.7,
-          stagger: 0.015,
+          duration: animationDuration,
+          stagger: wordStagger,
+          immediateRender: false,
           scrollTrigger: {
             trigger: el,
             scroller,
@@ -88,12 +95,13 @@ const ScrollReveal = ({
       if (enableBlur) {
         gsap.fromTo(
           wordElements,
-          { filter: `blur(${blurStrength}px)` },
+          { filter: `blur(${blurAmount}px)` },
           {
             ease: 'power3.out',
             filter: 'blur(0px)',
-            duration: 0.7,
-            stagger: 0.015,
+            duration: animationDuration,
+            stagger: wordStagger,
+            immediateRender: false,
             scrollTrigger: {
               trigger: el,
               scroller,

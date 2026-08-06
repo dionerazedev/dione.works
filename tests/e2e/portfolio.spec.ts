@@ -262,7 +262,7 @@ test('Migo uses the contained grayscale three-phone thumbnail across themes and 
   await expect(lightbox).toBeHidden();
 
   await page.goto('/work/migo');
-  await expect(page.locator('.case-study-cover img')).toHaveAttribute('src', '/images/projects/migo-desktop.webp');
+  await expect(page.locator('.case-study-cover img')).toHaveAttribute('src', '/images/projects/migo-ai-travel-buddy.webp');
   expect(errors).toEqual([]);
 });
 
