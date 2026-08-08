@@ -22,7 +22,7 @@ export const ImageLightbox = ({ image, isOpen, onClose }: { image: ProjectImageD
           <div className="dialog-backdrop" onMouseDown={onClose} aria-hidden="true" />
           <motion.div ref={dialogRef} initial={{ opacity: 0, scale: 0.975 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.985 }} className="lightbox-dialog" role="dialog" aria-modal="true" aria-label={`Enlarged view of ${image.label ?? image.alt}`} tabIndex={-1}>
             <button ref={closeRef} type="button" onClick={onClose} className="lightbox-close">Close <X size={16} /></button>
-            <ProjectImage src={image.src} alt={image.alt} width={image.width} height={image.height} />
+            <ProjectImage className={image.kind === 'detail' ? 'is-detail-image' : undefined} src={image.src} alt={image.alt} width={image.width} height={image.height} />
           </motion.div>
         </motion.div>
       )}

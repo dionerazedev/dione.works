@@ -26,6 +26,38 @@ export interface ProjectCaseStudySection {
   items?: string[];
 }
 
+export interface ProjectCaseStudyMetric {
+  value: string;
+  label: string;
+  note?: string;
+}
+
+export interface ProjectArchitectureNode {
+  label: string;
+  title: string;
+  description: string;
+}
+
+export interface ProjectBuildGroup {
+  title: string;
+  items: string[];
+}
+
+export interface ProjectProofCard {
+  title: string;
+  caption: string;
+  type: 'schema' | 'flow';
+  image?: ProjectImage;
+  imageCaption?: string;
+  bullets?: string[];
+  steps?: string[];
+}
+
+export interface ProjectImpactComparison {
+  label: string;
+  value: string;
+}
+
 export interface ProjectData {
   id: string;
   slug: string;
@@ -56,6 +88,15 @@ export interface ProjectData {
   measuredResults?: string[];
   expectedBenefits?: string[];
   outcome?: string;
+  caseStudyMetrics?: ProjectCaseStudyMetric[];
+  architectureNodes?: ProjectArchitectureNode[];
+  architectureNotes?: string[];
+  buildGroups?: ProjectBuildGroup[];
+  proofCards?: ProjectProofCard[];
+  reliabilityItems?: string[];
+  impactSummary?: string;
+  impactComparison?: ProjectImpactComparison[];
+  outcomeFlow?: string[];
   disclosure?: string;
   platforms?: AutomationPlatform[];
   images?: ProjectImage[];

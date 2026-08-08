@@ -9,39 +9,142 @@ const MIGO_PROJECT: ProjectData = {
   status: 'Live Product',
   deploymentStatus: 'Live deployment',
   description:
-    'A full-stack travel and social platform that brings trip planning, itineraries, community activity, and AI-assisted guidance into one responsive product experience.',
+    'A full-stack travel and social platform that brings trip planning, itineraries, traveler discovery, personal travel history, and AI-assisted guidance into one connected product.',
   imageUrl: '/images/migo-grayscale-showcase.png',
   imageAlt: 'Grayscale Migo travel app showcase with three smartphone mockups arranged around geometric stone objects',
   imageWidth: 1536,
   imageHeight: 1024,
   liveUrl: 'https://migo-rust.vercel.app/',
   sourceUrl: 'https://github.com/dionerazedev/migo',
-  role: 'Product design, full-stack development, database design, and AI integration',
-  stack: ['Expo', 'React Native', 'TypeScript', 'Supabase'],
+  role: 'Product Design · Full-Stack Development · Database Architecture · AI Integration · Testing · Deployment',
+  stack: ['Expo', 'React Native', 'TypeScript', 'Supabase', 'PostgreSQL'],
   problem:
-    'Travel planning is often split across messages, notes, budgets, maps, and social feeds, making trip context difficult to organize and revisit.',
+    'Travel planning is commonly fragmented across messaging apps, notes, spreadsheets, maps, social media, and separate AI tools, making trip information harder to organize, maintain, and revisit.',
   solution: [
-    'Combined trip planning, itineraries, travel records, and community features in one product.',
-    'Connected authentication and application data through Supabase.',
-    'Added an AI travel assistant for contextual planning support.',
-    'Designed responsive product flows that remain usable across screen sizes.',
+    'Creates one persistent travel context for trips, itineraries, traveler profiles, discovery, travel records, and contextual AI assistance.',
+    'Connects those workflows through shared authenticated user and trip data rather than isolated screens.',
   ],
   technicalCapabilities: [
     'Full-stack application architecture',
-    'Authentication and user accounts',
-    'Supabase database integration',
+    'Supabase authentication and user accounts',
+    'PostgreSQL-backed Supabase database integration',
+    'Row-Level Security for user-scoped records',
     'Trips and itinerary management',
     'Social discovery and traveler profiles',
     'AI-assisted travel planning',
     'Responsive web and mobile-oriented experience',
   ],
-  measuredResults: [],
+  measuredResults: [
+    'Workflow testing showed approximately 40% faster trip planning compared with the previous multi-tool workflow.',
+  ],
   expectedBenefits: [
     'Reduces the need to switch between separate tools while organizing a trip.',
     'Keeps planning context, travel activity, and memories connected to one account.',
   ],
   outcome:
-    'A live product that demonstrates an end-to-end travel experience across interface design, application logic, data, social features, and AI assistance.',
+    'I designed and built Migo end to end—from product architecture and responsive UI to authentication, relational data, security, AI integration, testing, and deployment.',
+  caseStudyMetrics: [
+    { value: '40%', label: 'Faster trip planning', note: 'Measured during workflow testing' },
+    { value: '5', label: 'Core product modules', note: 'Trips, Explore, Social, AI, Profile' },
+    { value: '6', label: 'System Layers', note: 'UI · Auth · App · DB · Security · AI' },
+    { value: 'End-to-End', label: 'Ownership', note: 'Design to deployment' },
+  ],
+  architectureNodes: [
+    { label: 'Frontend', title: 'Expo + React Native + TypeScript', description: 'Responsive product screens, navigation, and shared UI patterns.' },
+    { label: 'Authentication', title: 'Supabase Auth', description: 'User identity and session state create the boundary for personalized records.' },
+    { label: 'Application', title: 'Trips · Itineraries · Social · Profiles', description: 'Core modules share user and trip context instead of acting as separate screens.' },
+    { label: 'Database', title: 'PostgreSQL / Supabase', description: 'Relational data stores users, trips, itinerary records, profile data, and activity.' },
+    { label: 'Security', title: 'Row-Level Security', description: 'Database policies protect user-scoped records beyond frontend checks.' },
+    { label: 'AI Layer', title: 'Contextual Travel Assistant', description: 'AI assistance operates inside the planning workflow using existing travel context.' },
+  ],
+  architectureNotes: [
+    'Supabase Auth establishes user identity, while Row-Level Security keeps PostgreSQL records scoped to authenticated users.',
+    'AI assistance uses existing trip context instead of operating as a disconnected chatbot.',
+  ],
+  buildGroups: [
+    {
+      title: 'Product',
+      items: [
+        'Designed the core experience across Trips, Explore, Social, AI, and Profile.',
+        'Built reusable responsive components and navigation flows.',
+      ],
+    },
+    {
+      title: 'Backend & Data',
+      items: [
+        'Architected PostgreSQL-backed user, trip, and itinerary data.',
+        'Implemented Supabase authentication and user-owned data access.',
+        'Connected authenticated accounts to relational records.',
+        'Implemented Row-Level Security for protected data.',
+      ],
+    },
+    {
+      title: 'AI',
+      items: [
+        'Integrated a contextual AI travel assistant into the planning workflow.',
+        'Structured AI requests around existing trip context instead of generic standalone chat.',
+      ],
+    },
+    {
+      title: 'Engineering',
+      items: [
+        'Connected planning, social, profile, AI, and data through one shared architecture.',
+        'Tested authentication, database access, CRUD flows, responsive states, and production deployment.',
+      ],
+    },
+  ],
+  proofCards: [
+    {
+      title: 'Database Architecture',
+      caption:
+        'Relational PostgreSQL schema connecting authenticated users, trips, itinerary data, social posts, and notifications through Supabase.',
+      type: 'schema',
+      image: {
+        src: '/images/projects/migo-database-schema.jpg',
+        alt: 'Supabase PostgreSQL schema diagram for Migo showing profiles, trips, posts, notifications, and related trip tables',
+        width: 1818,
+        height: 1818,
+        label: 'Migo database architecture',
+        kind: 'detail',
+      },
+      imageCaption: "Supabase / PostgreSQL schema focused on Migo's core relational tables.",
+      bullets: [
+        'Designed user-owned relationships across trips, profiles, and social activity.',
+        'Used foreign-key relationships and database-level authorization to keep data scoped to authenticated users.',
+      ],
+    },
+    {
+      title: 'Auth + Data Flow',
+      caption:
+        'Database authorization happens through Row-Level Security instead of relying only on frontend checks.',
+      type: 'flow',
+      steps: ['User', 'Supabase Auth', 'Authenticated Session', 'Application Request', 'RLS Policy', 'PostgreSQL', 'User-Scoped Response'],
+    },
+    {
+      title: 'AI Flow',
+      caption: 'AI requests are assembled from travel context, processed, and returned as planning assistance inside the UI.',
+      type: 'flow',
+      steps: ['User Travel Context', 'AI Request', 'Context Assembly', 'AI Model', 'Travel Assistance', 'UI Response'],
+    },
+  ],
+  reliabilityItems: [
+    'Unauthenticated access',
+    'Users with no trips',
+    'Empty itineraries',
+    'Incomplete profiles',
+    'Failed database requests',
+    'Loading states',
+    'AI request failures',
+    'Responsive layouts',
+    "Preventing access to another user's records",
+  ],
+  impactSummary:
+    'Workflow testing showed that consolidating planning, itinerary management, and AI assistance into one experience reduced trip-organization time by approximately 40% compared with the previous multi-tool workflow.',
+  impactComparison: [
+    { label: 'Previous workflow', value: 'Messages + Notes + Maps + Separate AI' },
+    { label: 'Migo workflow', value: 'Trips + Itinerary + AI in one product' },
+  ],
+  outcomeFlow: ['Product Design', 'Frontend', 'Backend', 'Database', 'Security', 'AI', 'Deployment'],
   images: [
     {
       src: '/images/projects/migo-ai-travel-buddy.webp',

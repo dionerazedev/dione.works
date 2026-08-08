@@ -442,6 +442,11 @@ kbd { border: 1px solid var(--border-strong); border-radius: 4px; background: va
 .case-study-lede { max-width: 64ch; margin: 22px 0 0; color: var(--muted); }
 .case-study-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
 .case-study-demo-note { margin: 12px 0 0; color: var(--faint); font: 9px "Geist Mono", monospace; }
+.case-study-metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; overflow: hidden; margin-top: 42px; border: 1px solid var(--border); border-radius: 12px; background: var(--border); }
+.case-study-metrics article { display: grid; min-height: 124px; align-content: start; background: var(--background); padding: 18px; }
+.case-study-metrics strong { overflow-wrap: anywhere; font: 400 clamp(1.55rem, 5vw, 2.45rem)/1 "Geist Pixel", "Geist Mono", monospace; letter-spacing: -.02em; }
+.case-study-metrics span { margin-top: 10px; color: var(--foreground); font-size: 13px; font-weight: 600; line-height: 1.25; }
+.case-study-metrics small { margin-top: 8px; color: var(--muted); font: 9px/1.45 "Geist Mono", monospace; text-transform: uppercase; }
 .case-study-cover { display: block; width: 100%; margin-top: 46px; overflow: hidden; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); padding: 6px; cursor: zoom-in; }
 .case-study-cover img { display: block; width: 100%; max-height: 700px; border-radius: 7px; object-fit: contain; }
 .case-study-meta { display: grid; margin: 40px 0 0; border-block: 1px solid var(--border); }
@@ -450,17 +455,59 @@ kbd { border: 1px solid var(--border-strong); border-radius: 4px; background: va
 .case-study-meta dt { color: var(--faint); font: 9px "Geist Mono", monospace; text-transform: uppercase; }
 .case-study-meta dd { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
 .case-study-body { max-width: 672px; margin: 60px auto 0; }
+.case-study-body.has-enhanced-case-study { max-width: 816px; }
 .case-study-body > section { padding: 42px 0; border-top: 1px solid var(--border); }
 .case-study-body h2, .case-study-gallery h2 { margin: 12px 0 0; font-size: 21px; letter-spacing: -.02em; }
 .case-study-body section > p:not(.section-index) { margin: 18px 0 0; color: var(--muted); line-height: 1.72; }
 .case-study-body ul { display: grid; gap: 10px; margin: 20px 0 0; padding-left: 18px; color: var(--muted); }
+.problem-solution-grid, .build-group-grid, .proof-grid { display: grid; gap: 12px; margin-top: 24px; }
+.problem-solution-grid article, .build-group-grid article, .proof-card { border: 1px solid var(--border); border-radius: 12px; background: var(--surface); padding: 18px; }
+.problem-solution-grid h3, .build-group-grid h3, .proof-grid h3 { margin: 0; font-size: 14px; line-height: 1.25; }
+.problem-solution-grid p, .proof-card > p { margin: 12px 0 0; color: var(--muted); font-size: 12px; line-height: 1.62; }
+.problem-solution-grid ul, .build-group-grid ul { margin-top: 12px; }
+.architecture-flow { display: grid; gap: 10px; margin-top: 24px; counter-reset: architecture-step; }
+.architecture-flow article { position: relative; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); padding: 16px 16px 16px 52px; counter-increment: architecture-step; }
+.architecture-flow article::before { position: absolute; top: 16px; left: 16px; display: grid; width: 22px; height: 22px; place-items: center; border: 1px solid var(--border-strong); border-radius: 50%; color: var(--faint); font: 9px "Geist Mono", monospace; content: counter(architecture-step, decimal-leading-zero); }
+.architecture-flow article:not(:last-child)::after { position: absolute; bottom: -11px; left: 26px; width: 1px; height: 10px; background: var(--border-strong); content: ""; }
+.architecture-flow span { color: var(--faint); font: 8px "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; }
+.architecture-flow strong { display: block; margin-top: 5px; font-size: 14px; line-height: 1.25; }
+.architecture-flow p { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.58; }
+.architecture-notes { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-left: 0 !important; list-style: none; }
+.architecture-notes li, .reliability-grid li { border-top: 1px solid var(--border); padding-top: 10px; font-size: 12px; line-height: 1.55; }
+.proof-grid { grid-template-columns: minmax(0, 1fr); }
+.proof-card-primary { padding: 16px; }
+.proof-card > ul { margin-top: 14px; font-size: 12px; line-height: 1.55; }
+.schema-image-button { display: block; width: 100%; margin-top: 16px; overflow: hidden; border: 1px solid var(--border); border-radius: 10px; background: #070908; padding: 6px; cursor: zoom-in; }
+.schema-image-button img { display: block; width: 100%; height: auto; border-radius: 7px; background: #070908; object-fit: contain; }
+.schema-image-caption { display: block; margin-top: 9px; color: var(--faint); font: 9px/1.5 "Geist Mono", monospace; text-transform: uppercase; }
+.case-study-flow { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
+.case-study-flow li { position: relative; display: inline-flex; min-height: 34px; align-items: center; border: 1px solid var(--border); border-radius: 999px; background: var(--background); padding: 0 12px; color: var(--muted); font: 9px/1.2 "Geist Mono", monospace; text-transform: uppercase; }
+.case-study-flow li:not(:last-child)::after { margin-left: 8px; color: var(--faint); content: "→"; }
+.reliability-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-left: 0 !important; list-style: none; }
+.impact-comparison { display: grid; gap: 1px; overflow: hidden; margin-top: 24px; border: 1px solid var(--border); border-radius: 12px; background: var(--border); }
+.impact-comparison article { display: grid; gap: 7px; background: var(--surface); padding: 14px; }
+.impact-comparison span { color: var(--faint); font: 9px "Geist Mono", monospace; text-transform: uppercase; }
+.impact-comparison strong { color: var(--foreground); font-size: 12px; line-height: 1.45; }
+.impact-result { display: grid; gap: 16px; margin-top: 14px; border-block: 1px solid var(--border); padding: 24px 0; }
+.impact-result > strong { font: 400 clamp(3.3rem, 12vw, 5.5rem)/.86 "Geist Pixel", "Geist Mono", monospace; letter-spacing: -.03em; }
+.impact-result p { max-width: 58ch; margin: 0; color: var(--muted); line-height: 1.7; }
+.outcome-section > p:not(.section-index) { max-width: 62ch; }
 .case-study-disclosure { margin-top: 20px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); padding: 18px; }
 .case-study-disclosure strong { font: 9px "Geist Mono", monospace; text-transform: uppercase; }
 .case-study-disclosure p { margin: 7px 0 0; color: var(--muted); font-size: 12px; }
 .case-study-gallery { margin-top: 54px; padding-top: 40px; border-top: 1px solid var(--border); }
-.case-study-gallery > div:last-child { display: grid; gap: 12px; margin-top: 24px; }
+.case-study-gallery-grid { display: grid; gap: 12px; margin-top: 24px; }
 .case-study-gallery button { border: 1px solid var(--border); border-radius: 12px; background: var(--surface); padding: 5px; cursor: zoom-in; }
 .case-study-gallery img { display: block; width: 100%; border-radius: 7px; }
+.migo-screen-gallery { display: grid; gap: 12px; margin-top: 24px; }
+.migo-screen-grid { display: grid; gap: 12px; }
+.migo-screen-grid button { position: relative; display: grid; aspect-ratio: 941 / 1672; overflow: hidden; place-items: center; }
+.migo-screen-grid img { width: 100%; height: 100%; object-fit: contain; }
+.migo-screen-grid span { position: absolute; right: 12px; bottom: 12px; left: 12px; color: var(--faint); font: 9px "Geist Mono", monospace; text-transform: uppercase; }
+.project-pagination { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+.project-pagination a { display: flex; align-items: center; gap: 8px; font-size: 11px; }
+.project-pagination a:last-child { justify-content: flex-end; text-align: right; }
+.project-pagination small { display: block; color: var(--faint); font: 8px "Geist Mono", monospace; text-transform: uppercase; }
 .not-found { display: flex; min-height: 70dvh; flex-direction: column; justify-content: center; }
 .not-found h1 { max-width: 14ch; margin: 15px 0 0; font: 400 clamp(2.35rem, 7vw, 3rem)/1 "Geist Pixel", monospace; }
 .not-found > p:not(.section-index) { max-width: 52ch; color: var(--muted); }
@@ -492,6 +539,7 @@ kbd { border: 1px solid var(--border-strong); border-radius: 4px; background: va
 .lightbox-dialog { position: relative; display: flex; max-width: min(96vw, 1400px); max-height: calc(100dvh - 24px); flex-direction: column; align-items: flex-end; gap: 7px; }
 .lightbox-close { display: inline-flex; min-height: 44px; align-items: center; gap: 6px; border: 0; background: transparent; color: var(--foreground); font: 9px "Geist Mono", monospace; cursor: pointer; text-transform: uppercase; }
 .lightbox-dialog > img { display: block; max-width: 100%; max-height: calc(100dvh - 74px); border: 1px solid var(--border); border-radius: 12px; background: var(--surface); object-fit: contain; }
+.lightbox-dialog > img.is-detail-image { background: #070908; }
 
 .chat-launcher { position: fixed; right: 14px; bottom: 14px; z-index: 65; display: grid; width: 48px; height: 48px; place-items: center; border: 1px solid var(--foreground); border-radius: 50%; background: var(--foreground); color: var(--background); box-shadow: var(--shadow); cursor: pointer; }
 .chat-launcher.is-hidden { pointer-events: none; opacity: 0; }
@@ -535,7 +583,18 @@ kbd { border: 1px solid var(--border-strong); border-radius: 4px; background: va
   .case-study-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .case-study-meta > div { padding: 14px; border-right: 1px solid var(--border); }
   .case-study-meta > div:nth-child(even) { border-right: 0; }
-  .case-study-gallery > div:last-child { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .case-study-metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .problem-solution-grid, .build-group-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .proof-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .proof-card-primary { grid-column: 1 / -1; }
+  .impact-comparison { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .architecture-flow { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; overflow: hidden; border: 1px solid var(--border); border-radius: 12px; background: var(--border); }
+  .architecture-flow article { border: 0; border-radius: 0; padding: 44px 14px 16px; }
+  .architecture-flow article::before { top: 14px; left: 14px; }
+  .architecture-flow article:not(:last-child)::after { top: 25px; right: -6px; bottom: auto; left: auto; width: 12px; height: 1px; z-index: 1; }
+  .architecture-flow article:nth-child(3)::after { display: none; }
+  .migo-screen-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .case-study-gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .nickname-form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .nickname-form > div, .nickname-form > button { grid-column: 1 / -1; }
 }
@@ -565,6 +624,7 @@ kbd { border: 1px solid var(--border-strong); border-radius: 4px; background: va
   .desktop-sidebar .navigation-primary a.is-active::before { position: static; flex: 0 0 auto; font-size: 13px; line-height: 1; }
   .desktop-sidebar .sidebar-playground { margin-top: 14px; padding-top: 14px; }
   .desktop-sidebar .basketball-court { margin-top: 5px; }
+  .migo-screen-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .desktop-sidebar .playground-scoreboard { min-height: 24px; }
   .desktop-sidebar .playground-controls button { min-height: 24px; }
   .desktop-sidebar .navigation-footer { gap: clamp(20px, 2.6vh, 26px); padding-bottom: 0; }
@@ -641,6 +701,8 @@ kbd { border: 1px solid var(--border-strong); border-radius: 4px; background: va
   .article-pagination a:last-child { justify-content: flex-start; text-align: left; }
   .reading-page, .community-page, .case-study-page, .not-found { padding-top: 56px; padding-bottom: 88px; }
   .case-study-cover { margin-top: 38px; }
+  .project-pagination { grid-template-columns: 1fr; }
+  .project-pagination a:last-child { justify-content: flex-start; text-align: left; }
   .chat-launcher { right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); width: 52px; height: 52px; }
   .chat-panel { right: 10px; bottom: calc(78px + env(safe-area-inset-bottom)); width: min(calc(100vw - 20px), 390px); }
   .gear-page { width: min(100% - 28px, 420px); padding-top: 54px; }

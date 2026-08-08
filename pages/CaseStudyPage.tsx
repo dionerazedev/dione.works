@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { ArrowLeft, ArrowRight, ArrowUpRight, GithubLogo, PlayCircle } from '@phosphor-icons/react';
 import { Link, useParams } from 'react-router-dom';
 import { ALL_PROJECTS, PROJECTS_BY_SLUG } from '../data/projects';
-import type { ProjectImage as ProjectImageData } from '../types/project';
+import type { ProjectData, ProjectImage as ProjectImageData, ProjectProofCard } from '../types/project';
 import { ImageLightbox } from '../components/projects/ImageLightbox';
 import { ProjectStatusBadge } from '../components/projects/ProjectStatusBadge';
 import { ProjectImage } from '../components/ui/ProjectImage';
@@ -11,6 +11,92 @@ import { useRouteMetadata } from '../components/ui/useRouteMetadata';
 import { NotFoundPage } from './NotFoundPage';
 
 const asItems = (value?: string | string[]) => Array.isArray(value) ? value : value ? [value] : [];
+const hasEnhancedCaseStudy = (project: ProjectData) => Boolean(project.caseStudyMetrics?.length || project.architectureNodes?.length || project.buildGroups?.length || project.proofCards?.length || project.reliabilityItems?.length || project.impactSummary || project.outcomeFlow?.length);
+
+const CaseStudyMetrics = ({ project }: { project: ProjectData }) => project.caseStudyMetrics?.length ? (
+  <section className="case-study-metrics" aria-label={`${project.title} project metrics`}>
+    {project.caseStudyMetrics.map((metric) => <article key={`${metric.value}-${metric.label}`}><strong>{metric.value}</strong><span>{metric.label}</span>{metric.note && <small>{metric.note}</small>}</article>)}
+  </section>
+) : null;
+
+const FlowSteps = ({ steps }: { steps: string[] }) => <ol className="case-study-flow">{steps.map((step) => <li key={step}>{step}</li>)}</ol>;
+
+const ProofVisual = ({ card, onPreview }: { card: ProjectProofCard; onPreview: (image: ProjectImageData) => void }) => {
+  if (card.type === 'flow' && card.steps?.length) return <FlowSteps steps={card.steps} />;
+  if (card.type === 'schema' && card.image) {
+    const image = card.image;
+
+    return (
+      <>
+        <button type="button" className="schema-image-button" onClick={() => onPreview(image)} aria-label={`Enlarge ${image.label ?? card.title}`}>
+          <ProjectImage src={image.src} alt={image.alt} width={image.width} height={image.height} loading="lazy" />
+        </button>
+        {card.imageCaption && <small className="schema-image-caption">{card.imageCaption}</small>}
+      </>
+    );
+  }
+
+  return null;
+};
+
+const EnhancedCaseStudy = ({ project, solutions, sectionIndex, onPreview }: { project: ProjectData; solutions: string[]; sectionIndex: (number: number | null, label: string) => string; onPreview: (image: ProjectImageData) => void }) => (
+  <>
+    {(project.problem || solutions.length > 0) && <section className="case-study-split-section"><p className="section-index">{sectionIndex(1, 'problem / solution')}</p><h2>One travel context instead of scattered tools</h2><div className="problem-solution-grid">{project.problem && <article><h3>Problem</h3><p>{project.problem}</p></article>}{solutions.length > 0 && <article><h3>Solution</h3><ul>{solutions.map((item) => <li key={item}>{item}</li>)}</ul></article>}</div></section>}
+
+    {project.architectureNodes?.length ? <section className="case-study-architecture"><p className="section-index">{sectionIndex(2, 'system architecture')}</p><h2>System architecture</h2><div className="architecture-flow">{project.architectureNodes.map((node) => <article key={node.label}><span>{node.label}</span><strong>{node.title}</strong><p>{node.description}</p></article>)}</div>{project.architectureNotes?.length ? <ul className="architecture-notes">{project.architectureNotes.map((note) => <li key={note}>{note}</li>)}</ul> : null}</section> : null}
+
+    {project.buildGroups?.length ? <section><p className="section-index">{sectionIndex(3, 'what i built')}</p><h2>What I built</h2><div className="build-group-grid">{project.buildGroups.map((group) => <article key={group.title}><h3>{group.title}</h3><ul>{group.items.map((item) => <li key={item}>{item}</li>)}</ul></article>)}</div></section> : null}
+
+    {project.proofCards?.length ? <section><p className="section-index">{sectionIndex(4, 'engineering proof')}</p><h2>Backend and architecture proof</h2><div className="proof-grid">{project.proofCards.map((card) => <article key={card.title} className={card.type === 'schema' ? 'proof-card proof-card-primary' : 'proof-card'}><h3>{card.title}</h3><ProofVisual card={card} onPreview={onPreview} /><p>{card.caption}</p>{card.bullets?.length ? <ul>{card.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul> : null}</article>)}</div></section> : null}
+
+    {project.reliabilityItems?.length ? <section><p className="section-index">{sectionIndex(5, 'reliability')}</p><h2>Built beyond the happy path</h2><p>Production-style states were handled as part of the product experience, not treated as afterthoughts.</p><ul className="reliability-grid">{project.reliabilityItems.map((item) => <li key={item}>{item}</li>)}</ul></section> : null}
+
+    {(project.impactSummary || project.measuredResults?.length) ? <section className="impact-section"><p className="section-index">{sectionIndex(6, 'impact')}</p><h2>Measured project result</h2>{project.impactComparison?.length ? <div className="impact-comparison">{project.impactComparison.map((item) => <article key={item.label}><span>{item.label}</span><strong>{item.value}</strong></article>)}</div> : null}<div className="impact-result"><strong>40%</strong><p>{project.impactSummary ?? project.measuredResults?.[0]}</p></div></section> : null}
+
+    {(project.outcome || project.outcomeFlow?.length) ? <section className="outcome-section"><p className="section-index">{sectionIndex(7, 'outcome')}</p><h2>End-to-end ownership</h2>{project.outcome && <p>{project.outcome}</p>}{project.outcomeFlow?.length ? <FlowSteps steps={project.outcomeFlow} /> : null}<div className="case-study-actions">{project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noreferrer" className="button button-primary">Open live product <ArrowUpRight size={14} /></a>}{project.sourceUrl && <a href={project.sourceUrl} target="_blank" rel="noreferrer" className="button button-secondary"><GithubLogo size={15} />View source</a>}</div></section> : null}
+  </>
+);
+
+const ProjectScreensGallery = ({ images, isMigo, onPreview }: { images: ProjectImageData[]; isMigo: boolean; onPreview: (image: ProjectImageData) => void }) => {
+  if (images.length <= 1) return null;
+
+  if (isMigo) {
+    return (
+      <section className="case-study-gallery is-migo-gallery" aria-labelledby="gallery-heading">
+        <div>
+          <p className="section-index">Gallery</p>
+          <h2 id="gallery-heading">Project screens</h2>
+        </div>
+        <div className="migo-screen-gallery">
+          <div className="migo-screen-grid">
+            {images.slice(0, 4).map((image) => (
+              <button key={image.src} type="button" onClick={() => onPreview(image)} aria-label={`Enlarge ${image.label ?? image.alt}`}>
+                <ProjectImage src={image.src} alt={image.alt} width={image.width} height={image.height} />
+                {image.label && <span>{image.label}</span>}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="case-study-gallery" aria-labelledby="gallery-heading">
+      <div>
+        <p className="section-index">Gallery</p>
+        <h2 id="gallery-heading">Project screens</h2>
+      </div>
+      <div className="case-study-gallery-grid">
+        {images.map((image) => (
+          <button key={image.src} type="button" onClick={() => onPreview(image)} aria-label={`Enlarge ${image.label ?? image.alt}`}>
+            <ProjectImage src={image.src} alt={image.alt} width={image.width} height={image.height} />
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+};
 
 export const CaseStudyPage = () => {
   const { slug = '' } = useParams();
@@ -50,6 +136,8 @@ export const CaseStudyPage = () => {
     kind: 'workflow' as const,
   }];
   const solutions = asItems(project.solution);
+  const enhancedCaseStudy = hasEnhancedCaseStudy(project);
+  const useMigoGallery = project.slug === 'migo';
   const optionalSections = [
     { label: 'target users', title: 'Who the project is for', items: project.targetUsers },
     { label: 'goals', title: 'What the project set out to do', items: project.goals },
@@ -72,13 +160,14 @@ export const CaseStudyPage = () => {
   const expectedBenefitsNumber = project.expectedBenefits?.length ? nextSectionNumber++ : null;
   const outcomeNumber = project.outcome ? nextSectionNumber++ : null;
   const sectionIndex = (number: number | null, label: string) => `${String(number).padStart(2, '0')} — ${label}`;
+  const showHeroDeploymentStatus = !(project.slug === 'migo' && project.status === 'Live Product');
 
   return (
     <EditorCanvas>
       <article className="case-study-page">
         <header className="case-study-hero">
           <Link to="/#featured-work" className="back-link"><ArrowLeft size={14} />Back to selected work</Link>
-          <div className="case-study-kicker"><ProjectStatusBadge status={project.status} /><span>{project.deploymentStatus}</span></div>
+          <div className="case-study-kicker"><ProjectStatusBadge status={project.status} />{showHeroDeploymentStatus && <span>{project.deploymentStatus}</span>}</div>
           <p className="eyebrow">{project.label ?? project.category}</p>
           <h1>{project.title}</h1>
           <p className="case-study-lede">{project.description}</p>
@@ -91,9 +180,11 @@ export const CaseStudyPage = () => {
           {project.demoPassword && <p className="case-study-demo-note">Demo password: <code>{project.demoPassword}</code></p>}
         </header>
 
-        <button type="button" className="case-study-cover" onClick={() => setSelectedImage(gallery[0])} aria-label={`Enlarge ${gallery[0].label ?? project.title} image`}>
+        <CaseStudyMetrics project={project} />
+
+        {!enhancedCaseStudy && <button type="button" className="case-study-cover" onClick={() => setSelectedImage(gallery[0])} aria-label={`Enlarge ${gallery[0].label ?? project.title} image`}>
           <ProjectImage src={gallery[0].src} alt={gallery[0].alt} width={gallery[0].width} height={gallery[0].height} loading="eager" />
-        </button>
+        </button>}
 
         <dl className="case-study-meta">
           {project.role && <div><dt>Role</dt><dd>{project.role}</dd></div>}
@@ -102,8 +193,8 @@ export const CaseStudyPage = () => {
           <div><dt>Technologies</dt><dd>{project.stack?.join(' · ')}</dd></div>
         </dl>
 
-        <div className="case-study-body">
-          {project.caseStudySections?.length ? project.caseStudySections.map((section, index) => <section key={section.label}><p className="section-index">{sectionIndex(index + 1, section.label)}</p><h2>{section.title}</h2>{section.paragraphs?.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}{section.items?.length ? <ul>{section.items.map((item) => <li key={item}>{item}</li>)}</ul> : null}</section>) : <>
+        <div className={enhancedCaseStudy ? 'case-study-body has-enhanced-case-study' : 'case-study-body'}>
+          {enhancedCaseStudy ? <EnhancedCaseStudy project={project} solutions={solutions} sectionIndex={sectionIndex} onPreview={setSelectedImage} /> : project.caseStudySections?.length ? project.caseStudySections.map((section, index) => <section key={section.label}><p className="section-index">{sectionIndex(index + 1, section.label)}</p><h2>{section.title}</h2>{section.paragraphs?.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}{section.items?.length ? <ul>{section.items.map((item) => <li key={item}>{item}</li>)}</ul> : null}</section>) : <>
             {project.problem && <section><p className="section-index">{sectionIndex(problemNumber, 'problem')}</p><h2>What needed to be solved</h2><p>{project.problem}</p></section>}
             {solutions.length > 0 && <section><p className="section-index">{sectionIndex(solutionNumber, 'solution')}</p><h2>How the system responds</h2><ul>{solutions.map((item) => <li key={item}>{item}</li>)}</ul></section>}
             {project.technicalCapabilities?.length ? <section><p className="section-index">{sectionIndex(capabilitiesNumber, 'main features')}</p><h2>Technical capabilities</h2><ul className="case-study-grid-list">{project.technicalCapabilities.map((item) => <li key={item}>{item}</li>)}</ul></section> : null}
@@ -115,7 +206,7 @@ export const CaseStudyPage = () => {
           {project.disclosure && <aside className="case-study-disclosure"><strong>Project disclosure</strong><p>{project.disclosure}</p></aside>}
         </div>
 
-        {gallery.length > 1 && <section className="case-study-gallery" aria-labelledby="gallery-heading"><div><p className="section-index">Gallery</p><h2 id="gallery-heading">Project screens</h2></div><div>{gallery.map((image) => <button key={image.src} type="button" onClick={() => setSelectedImage(image)} aria-label={`Enlarge ${image.label ?? image.alt}`}><ProjectImage src={image.src} alt={image.alt} width={image.width} height={image.height} /></button>)}</div></section>}
+        <ProjectScreensGallery images={gallery} isMigo={useMigoGallery} onPreview={setSelectedImage} />
         <nav className="project-pagination" aria-label="Project navigation">
           {previousProject ? <Link to={`/work/${previousProject.slug}`}><ArrowLeft size={14} /><span><small>Previous project</small>{previousProject.title}</span></Link> : <span />}
           {nextProject ? <Link to={`/work/${nextProject.slug}`}><span><small>Next project</small>{nextProject.title}</span><ArrowRight size={14} /></Link> : <span />}
