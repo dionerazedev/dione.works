@@ -34,7 +34,7 @@ export const PROFILE_LINKS = {
   calendly: 'https://calendly.com/dioneoro11/30min',
   email: 'mailto:dioneraze.dev@gmail.com',
   emailAddress: 'dioneraze.dev@gmail.com',
-  resume: 'https://drive.google.com/file/d/1OzBZ4OUX5Bfb3l9-RjwBRFLapBG6dC-q/view?usp=sharing',
+  resume: 'https://drive.google.com/file/d/1Mh5F6o2c6RDE1RKImr6gox_XZFQx5P_U/view?usp=sharing',
   github: 'https://github.com/dionerazedev',
   linkedin: 'https://www.linkedin.com/in/dione-raze-oro-b274a8243/',
 } as const;
